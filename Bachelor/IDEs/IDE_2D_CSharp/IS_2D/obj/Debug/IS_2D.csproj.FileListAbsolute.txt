@@ -1,0 +1,10 @@
+C:\Users\Beytula Redzheb\Desktop\IS_2D\bin\Debug\IS_2D.exe.config
+C:\Users\Beytula Redzheb\Desktop\IS_2D\bin\Debug\IS_2D.exe
+C:\Users\Beytula Redzheb\Desktop\IS_2D\bin\Debug\IS_2D.pdb
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.AboutForm.resources
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.MainForm.resources
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.exe
+C:\Users\Beytula Redzheb\Desktop\IS_2D\obj\Debug\IS_2D.pdb

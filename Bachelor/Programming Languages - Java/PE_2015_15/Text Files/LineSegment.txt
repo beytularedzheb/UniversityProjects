@@ -1,0 +1,2 @@
+Line Segment:Line which has ends:-1:2:5:6
+Line Segment:Line which has ends:-45:2:78:-3

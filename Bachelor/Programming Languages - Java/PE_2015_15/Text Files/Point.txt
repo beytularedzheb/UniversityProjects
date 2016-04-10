@@ -1,0 +1,1 @@
+Point:A point is an exact location. It has no size, only position.:10:100

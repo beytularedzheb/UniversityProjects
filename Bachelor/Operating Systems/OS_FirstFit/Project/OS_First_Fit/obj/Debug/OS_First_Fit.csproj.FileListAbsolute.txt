@@ -1,0 +1,9 @@
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\bin\Debug\OS_FAT.exe.config
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\bin\Debug\OS_FAT.exe
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\bin\Debug\OS_FAT.pdb
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_First_Fit.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_First_Fit.frmMain.resources
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_FAT.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_First_Fit.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_FAT.exe
+C:\Users\Beytula Redzheb\Desktop\OS_FAT\OS_First_Fit\obj\Debug\OS_FAT.pdb

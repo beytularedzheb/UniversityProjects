@@ -1,0 +1,31 @@
+
+<center>
+	<br>
+	<br>
+	<h2 style="color:black">Продажби</h2>
+
+	<p><font color="red"><?php print $msg; ?></font></p>
+	
+	<form action="index.php" method="get">
+		<input type="hidden" name="cmd" value="browseSales">
+		Търсене:
+		<input type="text" name="search" value="<?php print $search; ?>">
+		<input type="submit" value="Търси">
+	</form>
+	
+	<table cellpadding="5" cellspacing="0" border="1">
+		<tr bgcolor="#BBBBBB">
+			<th>ИД</th>
+			<th>Магазин</th>
+			<th>Месец</th>
+			<th>План стокооборот</th>
+			<th>Изпълнение стокооборот</th>
+			<th></th>
+			<th></th>
+		</tr>
+		<?php print $tableSales; ?>
+		<tr bgcolor="#BBBBBB">
+			<td colspan="7"><b>Брой продажби: <?php print $numberOfSales; ?></b></td>
+		</tr>
+	</table>
+</center>

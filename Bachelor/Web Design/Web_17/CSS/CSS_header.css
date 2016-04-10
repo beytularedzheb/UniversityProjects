@@ -1,0 +1,142 @@
+body {
+	color: white; 
+	background-color:#000;
+}
+
+.main div a img {
+    width: 267px; height: 200px; border-style: none;
+	float: right; margin-bottom: 10px; 
+}
+
+.main div a:hover img {
+        border: 1px solid yellow;
+}
+
+.main div {
+    border-style: none; 
+    width: 296px; 
+    float: left;
+	text-align: justify;
+	font-size: 16px;
+	color: #00FF33;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.main p{
+    color: #00FF33; text-align: justify; font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+
+#myphoto{
+width: 90px; height: 120px; float: left; margin-right: 5px;
+}
+
+a:link{
+    color: yellow;
+	text-decoration: none; 
+}
+a:visited{
+    color: #FF9933;
+}
+a:hover{
+    color: #00FF33;
+}  
+
+h1{
+    text-align: center; color: white;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+h3{
+    text-align: justify; color: white;
+}
+
+.nav a {
+	background-image: url(../images/aqua5.png);
+	background-repeat: no-repeat;
+	width: 157px;
+	height:16px;
+	padding:7px 0 10px;
+	display: block;
+	text-decoration: none;
+	color: white;
+}
+
+.nav a:hover {
+	background-image: url(../images/aqua6.png);
+	text-decoration: none;
+	color: yellow; 
+}
+
+div{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #333333;
+	padding: 5px 5px 5px 5px;
+}
+	
+body div.outer{
+	border-style: none; 
+}
+
+.header{ 
+    background-image: url(../images/header-background.jpg);
+    background-repeat: no-repeat;
+    position: fixed;
+	top: 0; 
+	left: 0;
+	height: 25px;
+	width: 798px;
+	z-index: 1;  
+}
+
+.nav {
+    position: absolute;
+	top: 36px; left: 641px;
+	width: 157px; padding-top: 20px;
+	height: 1200px; background-image: url(../images/nav_BG.jpg); 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+	font-variant: small-caps; font-weight: bold; text-align: center; 
+}
+
+.main {
+    position: absolute;
+	top: 36px; left: 0;
+	height: 1200px;
+	width: 630px;
+	overflow: auto; 
+	background-color: black; 
+}
+
+.footer {
+    background-image: url(../images/footer-background.jpg);
+    background-repeat: no-repeat;
+    text-align: center;
+    position: fixed;
+	bottom: 0; left: 0;
+	width: 798px; height: 25px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px; font-style: oblique; 
+} 
+
+table{
+    width: 280px; 
+    text-align: center;
+	color: black; border: 1px solid green;
+}
+
+tr, tr+tr+tr {
+background-color: #999999;
+}
+
+tr+tr, tr+tr+tr+tr{background-color: #CCCCCC;
+}
+
+th,#left1,#left2,#left3 {font-family: Geneva, Arial, Helvetica, sans-serif; color: yellow; 
+}
+
+form{ font-size: 14px; color: #CCCCCC; text-align: left;
+}
+hr{color: #00FF33;}
+
+legend{color: yellow;}
+.main p{ text-indent: 20px;}

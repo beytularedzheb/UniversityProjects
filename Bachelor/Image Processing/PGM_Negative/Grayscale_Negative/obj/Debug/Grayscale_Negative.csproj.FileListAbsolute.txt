@@ -1,0 +1,18 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\bin\Debug\Grayscale_Negative.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\bin\Debug\Grayscale_Negative.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\bin\Debug\Grayscale_Negative.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\Grayscale_Negative\obj\Debug\Grayscale_Negative.FormMain.resources
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\bin\Debug\Grayscale_Negative.exe.config
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\bin\Debug\Grayscale_Negative.exe
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\bin\Debug\Grayscale_Negative.pdb
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.FormMain.resources
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.exe
+C:\Users\Beytula Redzheb\Desktop\Grayscale_Negative\obj\Debug\Grayscale_Negative.pdb

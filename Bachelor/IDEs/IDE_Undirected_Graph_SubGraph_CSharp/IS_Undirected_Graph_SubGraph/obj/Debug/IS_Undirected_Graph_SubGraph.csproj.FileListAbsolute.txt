@@ -1,0 +1,13 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\bin\Debug\IS_Undirected_Graph_SubGraph.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.AboutForm.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.MainForm.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\bin\Debug\IS_Undirected_Graph_SubGraph.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\bin\Debug\IS_Undirected_Graph_SubGraph.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph_SubGraph\bin\Debug\IS_Undirected_Graph_SubGraph.exe.config
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.exe
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph_SubGraph\obj\Debug\IS_Undirected_Graph_SubGraph.pdb

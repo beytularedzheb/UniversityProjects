@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Multi-file class diagram">
+  <ClassDiagramComponents>
+    <Class name="TeacherSingleton" package="dpteacher" visibility="public" xPosition="508.0" yPosition="259.0">
+      <Fields>
+        <Field name="connectionString" type="String" visibility="private" isFinal="true"/>
+        <Field name="username" type="String" visibility="private" isFinal="true"/>
+        <Field name="password" type="String" visibility="private" isFinal="true"/>
+        <Field name="instance" type="TeacherSingleton" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getInstance" returnType="TeacherSingleton" visibility="public" isStatic="true"/>
+        <Method name="addTeacher" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="getTeachers" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="getTeacher" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="DataValidationProxy" package="dpteacher.decorator" visibility="public" xPosition="724.0" yPosition="838.0">
+      <Fields>
+        <Field name="target" type="TeacherAdapter" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="TeacherAdapter" name="teacherAdapter"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="validate" returnType="boolean" visibility="private">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Teacher" package="dpteacher" visibility="public" xPosition="1826.0" yPosition="1246.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="firstName" type="String" visibility="private"/>
+        <Field name="lastName" type="String" visibility="private"/>
+        <Field name="title" type="String" visibility="private"/>
+        <Field name="pid" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="String" name="firstName"/>
+          <Argument type="String" name="lastName"/>
+          <Argument type="String" name="title"/>
+          <Argument type="String" name="pid"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="getFirstName" returnType="String" visibility="public"/>
+        <Method name="getLastName" returnType="String" visibility="public"/>
+        <Method name="getPid" returnType="String" visibility="public"/>
+        <Method name="getTitle" returnType="String" visibility="public"/>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="setFirstName" returnType="void" visibility="public">
+          <Argument type="String" name="firstName"/>
+        </Method>
+        <Method name="setLastName" returnType="void" visibility="public">
+          <Argument type="String" name="lastName"/>
+        </Method>
+        <Method name="setPid" returnType="void" visibility="public">
+          <Argument type="String" name="pid"/>
+        </Method>
+        <Method name="setTitle" returnType="void" visibility="public">
+          <Argument type="String" name="title"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ExtentionFactory" package="dpteacher.decorator" visibility="public" xPosition="920.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="createDecorator" returnType="ExtensionPanel" visibility="public" isStatic="true">
+          <Argument type="int" name="type"/>
+          <Argument type="ExtensionPanel" name="panel"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="BasicPanel" package="dpteacher.decorator" visibility="public" xPosition="1575.0" yPosition="598.0">
+      <Fields>
+        <Field name="panel" type="ExtensionPanel" visibility="private"/>
+        <Field name="extensionPanel" type="javax.swing.JPanel" visibility="private"/>
+        <Field name="lblFirstName" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="lblLastName" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="lblTitle" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="tfFirstName" type="javax.swing.JTextField" visibility="private"/>
+        <Field name="tfLastName" type="javax.swing.JTextField" visibility="private"/>
+        <Field name="tfTitle" type="javax.swing.JTextField" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="decorator"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getTeacher" returnType="Teacher" visibility="public"/>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="MainFrame" package="dpteacher" visibility="public" xPosition="2811.0" yPosition="1341.0">
+      <Fields>
+        <Field name="btnNew" type="javax.swing.JButton" visibility="private"/>
+        <Field name="btnSort" type="javax.swing.JButton" visibility="private"/>
+        <Field name="chbFrameSize" type="javax.swing.JCheckBox" visibility="private"/>
+        <Field name="jScrollPane1" type="javax.swing.JScrollPane" visibility="private"/>
+        <Field name="taTeachers" type="javax.swing.JTextArea" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+        <Method name="formWindowOpened" returnType="void" visibility="private">
+          <Argument type="java.awt.event.WindowEvent" name="evt"/>
+        </Method>
+        <Method name="btnSortActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="btnNewActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="btnSaveActionPerformed" returnType="void" visibility="private">
+          <Argument type="ActionEvent" name="evt"/>
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String" name="args"/>
+        </Method>
+        <Method name="updateList" returnType="void" visibility="private">
+          <Argument type="List&lt;Teacher&gt;" name="list"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ExpandedPanel" package="dpteacher.decorator" visibility="public" xPosition="2258.0" yPosition="20.0">
+      <Fields>
+        <Field name="originalPanel" type="ExtensionPanel" visibility="private"/>
+        <Field name="lblPid" type="JLabel" visibility="private"/>
+        <Field name="tfPid" type="JTextField" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="ExtensionPanel" name="panel"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getDrawPanel" returnType="ExtensionPanel" visibility="public"/>
+        <Method name="getPid" returnType="JTextField" visibility="public"/>
+        <Method name="myInitComponentsMethod" returnType="void" visibility="private"/>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ExtensionPanel" package="dpteacher.decorator" visibility="public" xPosition="1457.0" yPosition="195.0">
+      <Fields>
+        <Field name="MYPANEL_EXPANDED" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="MYPANEL_COMPACT" type="int" visibility="public" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+        <Method name="getDrawPanel" returnType="ExtensionPanel" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="TeacherSortByNameProxy" package="dpteacher" visibility="public" xPosition="614.0" yPosition="1732.0">
+      <Fields>
+        <Field name="target" type="TeacherAdapter" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="TeacherAdapter" name="target"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="TeacherAdapter" package="dpteacher" visibility="public" xPosition="306.0" yPosition="903.0">
+      <Fields>
+        <Field name="adaptee" type="TeacherSingleton" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="DPTeacher" package="dpteacher" visibility="public" xPosition="2643.0" yPosition="496.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Interface name="IOperations" package="dpteacher" visibility="public" xPosition="1368.0" yPosition="1781.0">
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="dpteacher.MainFrame" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.decorator.DataValidationProxy" target="dpteacher.IOperations"/>
+    <HasRelation name="originalPanel" source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.DataValidationProxy" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.TeacherSingleton" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel"/>
+    <HasRelation name="target" source="dpteacher.TeacherSortByNameProxy" target="dpteacher.TeacherAdapter" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.ExtentionFactory" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.TeacherSortByNameProxy" target="dpteacher.IOperations"/>
+    <HasRelation name="adaptee" source="dpteacher.TeacherAdapter" target="dpteacher.TeacherSingleton" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.BasicPanel" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.TeacherAdapter" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="instance" source="dpteacher.TeacherSingleton" target="dpteacher.TeacherSingleton" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.ExtensionPanel" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="target" source="dpteacher.decorator.DataValidationProxy" target="dpteacher.TeacherAdapter" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.IOperations" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.TeacherAdapter" target="dpteacher.IOperations"/>
+    <UseRelation source="dpteacher.TeacherSortByNameProxy" target="dpteacher.Teacher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="panel" source="dpteacher.decorator.BasicPanel" target="dpteacher.decorator.ExtensionPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

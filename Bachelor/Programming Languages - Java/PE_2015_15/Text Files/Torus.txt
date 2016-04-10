@@ -1,0 +1,1 @@
+Torus:It can be made by revolving a small circle (radius r) along a line made by a bigger circle (radius R); It has no edges or vertices:Surface Area = 4 x pi^2 x R x r

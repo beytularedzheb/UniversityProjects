@@ -1,0 +1,16 @@
+program StudentskiStol;
+
+uses
+  Vcl.Forms,
+  frmMainUnit in 'frmMainUnit.pas' {frmMain},
+  frmOrdersUnit in 'frmOrdersUnit.pas' {frmOrders};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmOrders, frmOrders);
+  Application.Run;
+end.

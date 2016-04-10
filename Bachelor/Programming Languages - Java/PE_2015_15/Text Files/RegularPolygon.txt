@@ -1,0 +1,2 @@
+Pentagon:A pentagon is a 5-sided Polygon (a flat shape with straight sides):Area of Pentagon = 1/4 x n x Side^2 / tan(pi/n):5:108
+Octagon:An octagon is an 8-sided polygon (a flat shape with straight sides):Area of Octagon = 1/4 x n x Side^2 / tan(pi/n):5:135

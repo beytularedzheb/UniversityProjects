@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Multi-file class diagram">
+  <ClassDiagramComponents>
+    <Class name="BasicPanel" package="dpteacher.decorator" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="panel" type="ExtensionPanel" visibility="private"/>
+        <Field name="extensionPanel" type="javax.swing.JPanel" visibility="private"/>
+        <Field name="lblFirstName" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="lblLastName" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="lblTitle" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="tfFirstName" type="javax.swing.JTextField" visibility="private"/>
+        <Field name="tfLastName" type="javax.swing.JTextField" visibility="private"/>
+        <Field name="tfTitle" type="javax.swing.JTextField" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="decorator"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getTeacher" returnType="Teacher" visibility="public"/>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ExtensionPanel" package="dpteacher.decorator" visibility="public" xPosition="133.0" yPosition="537.0">
+      <Fields>
+        <Field name="MYPANEL_EXPANDED" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="MYPANEL_COMPACT" type="int" visibility="public" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+        <Method name="getDrawPanel" returnType="ExtensionPanel" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ExpandedPanel" package="dpteacher.decorator" visibility="public" xPosition="1236.0" yPosition="499.0">
+      <Fields>
+        <Field name="originalPanel" type="ExtensionPanel" visibility="private"/>
+        <Field name="lblPid" type="JLabel" visibility="private"/>
+        <Field name="tfPid" type="JTextField" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="ExtensionPanel" name="panel"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getDrawPanel" returnType="ExtensionPanel" visibility="public"/>
+        <Method name="getPid" returnType="JTextField" visibility="public"/>
+        <Method name="myInitComponentsMethod" returnType="void" visibility="private"/>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ExtentionFactory" package="dpteacher.decorator" visibility="public" xPosition="1122.0" yPosition="54.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="createDecorator" returnType="ExtensionPanel" visibility="public" isStatic="true">
+          <Argument type="int" name="type"/>
+          <Argument type="ExtensionPanel" name="panel"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="panel" source="dpteacher.decorator.BasicPanel" target="dpteacher.decorator.ExtensionPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="originalPanel" source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.ExtensionPanel" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.decorator.ExtentionFactory" target="dpteacher.decorator.ExtensionPanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="dpteacher.decorator.ExpandedPanel" target="dpteacher.decorator.ExtensionPanel"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Multi-file class diagram">
+  <ClassDiagramComponents>
+    <Class name="DataValidationProxy" package="dpteacher.decorator" visibility="public" xPosition="189.0" yPosition="311.0">
+      <Fields>
+        <Field name="target" type="TeacherAdapter" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="TeacherAdapter" name="teacherAdapter"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="validate" returnType="boolean" visibility="private">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="TeacherAdapter" package="dpteacher" visibility="public" xPosition="603.0" yPosition="93.0">
+      <Fields>
+        <Field name="adaptee" type="TeacherSingleton" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Interface name="IOperations" package="dpteacher" visibility="public" xPosition="204.0" yPosition="29.0">
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="target" source="dpteacher.decorator.DataValidationProxy" target="dpteacher.TeacherAdapter" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.TeacherAdapter" target="dpteacher.IOperations"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.decorator.DataValidationProxy" target="dpteacher.IOperations"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

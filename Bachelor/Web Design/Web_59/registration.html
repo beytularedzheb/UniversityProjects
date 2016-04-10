@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="bg">
+<head>
+	<title>Регистрация</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script type="text/javascript" src="javascript.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<header >
+			<h1>
+				<a href="index.html" title="Начало">Диетолог <span>Ерсан</span></a>
+			</h1>
+		</header>
+		<nav>
+			<ul id="menu">
+				<li><a href="index.html" title="Начало">Начало</a></li>
+				<li><a href="galery.html" title="Галерия">Галерия</a></li>
+				<li><a href="registration.html" title="Регистрация">Регистрация</a></li>
+				<li><a href="about.html" title="За мен">За мен</a></li>
+			</ul>
+		</nav>
+		<div id="main" class="clear">
+			<section id="content" >
+				<article class="post">
+					<form id="reg_form" method="post" action="#" onsubmit="return check();">
+						<fieldset>
+							<legend>Регистрация</legend>
+							<table>
+								<tr>
+									<td><label for="firstN">*Име: </label></td>
+									<td><input type="text" id="firstN"></td>
+								</tr>
+								<tr>
+									<td><label for="famN">*Фамилия: </label></td>
+									<td><input type="text" id="famN"></td>
+								</tr>
+								<tr>
+									<td><label for="email">*Ел. поща: </label></td>
+									<td><input type="text" id="email"></td>
+								</tr>
+								<tr>
+									<td><label for="pw">*Парола: </label></td>
+									<td><input type="password" id="pw"></td>
+								</tr>
+								<tr>
+									<td><label for="pw">*Парола отново: </label></td>
+									<td><input type="password" id="pwp"></td>
+								</tr>								
+								<tr>
+									<td><input type="submit" value="Изпрати" name="submit"></td>
+									<td><input type="reset" value="Изчисти" name="reset"></td>
+								</tr>
+							</table>
+						</fieldset>
+					</form>
+				</article>
+			</section>
+		</div>
+		<footer>
+			<p>Copyright &copy; 2016</p>
+		</footer>		
+	</div>
+</body>
+</html>

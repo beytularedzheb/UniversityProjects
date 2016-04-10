@@ -1,0 +1,18 @@
+void main {
+	x = 5;
+	if (x == 5) then {
+		while (x < 10) do {
+			x = x + 1;
+		};
+	};
+
+	if (x > 10) then {
+		while (x > 9) do {
+			x = x - 5;
+		};
+	}
+	else {
+		a = 4;
+		x = x + a;
+	};
+}

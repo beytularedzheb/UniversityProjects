@@ -1,0 +1,9 @@
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\bin\Debug\IS_UseCase.exe.config
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\bin\Debug\IS_UseCase.exe
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\bin\Debug\IS_UseCase.pdb
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.AboutForm.resources
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.MainForm.resources
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.exe
+C:\Users\Beytula Redzheb\Desktop\IS_UseCase_CSharp\IS_UseCase\obj\Debug\IS_UseCase.pdb

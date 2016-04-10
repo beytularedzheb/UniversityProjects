@@ -1,0 +1,250 @@
+@charset "utf-8";
+
+html,body,div,span,h1,h2,h3,h4,h5,h6,p,blockquote,
+em,img,ul,li,article,aside,footer,header,nav,section,a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+	font-size: 100%;
+	text-decoration: none;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+.clear:after {
+	content: "";
+	clear: both;
+	display: block;
+}
+
+body {
+	background: #101a01 url('img/body_bg_1920x1080.jpg') no-repeat top center fixed;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	word-wrap: break-word;
+}
+
+a {
+	color: #fff691;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#wrapper {
+	width: 980px;
+	margin: 0 auto;
+}
+
+#header {
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+	border-left: 1px solid rgba(255, 255, 255, 0.4);
+	border-right: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 0 0 8px 8px;
+}
+
+#header img[alt="logo"] {
+	width: 400px;
+	margin: 5px 10px 5px 280px;
+}
+
+nav {
+	margin: 15px 0;
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 8px;
+}
+
+#menu {
+	text-align: center;
+	list-style: none;
+	font-size: 16px;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
+}
+
+#menu li {
+	display: inline-block;
+}
+
+#menu li a {
+	text-decoration: none;
+	display: inline-block;
+	padding: 5px 10px;
+	color: #444;
+}
+
+#menu li a:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+	color: white;
+	text-shadow: 1px 1px 1px black;
+}
+
+#main {
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 8px;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+#content {
+	width: 750px;
+	float: left;
+	color: black;
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+#content .post {
+	background-color: rgba(255, 255, 255, 0.4);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+	margin: 0 10px 10px 0;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: justify;
+}
+
+#content h2 {
+	color: #fff691;
+	text-align: center;
+	font-size: 16px;
+	text-shadow: 1px 1px 1px black;
+	margin: 5px 0;
+}
+
+#content img {
+	max-width: 400px;
+	margin: 10px;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+	float: left;
+}
+
+#content p {
+	text-indent: 20px;
+}
+
+#contacts {
+	padding: 5px;
+	float: right;
+	min-width: 190px;
+	border-left: 1px solid rgba(255, 255, 255, 0.4);
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+#contacts h3 {
+	text-align: center;
+	text-shadow: 1px 1px 1px black;
+}
+
+#contactsList {
+	padding: 8px 0 8px 0;
+	list-style: none;
+}
+
+#contactsList li {
+	padding: 2px 3px;
+}
+
+#contactsList li:nth-child(2n + 1) {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+.post ul#gallery {
+	margin: 0 16px;
+	list-style: none;
+}
+.post ul#gallery > li {
+	float: left;
+	margin: 5px;
+	border: 1px solid white;
+}
+.post ul#gallery > li > img, ul#gallery > li{
+	width: 160px;
+	height: 160px;
+	margin: 0;
+}
+.post ul#gallery > li:hover .big-img {
+	display: inline-block;
+}
+.post ul#gallery .big-img {
+	position: relative;
+	top: -161px;
+	left: -1px;
+	padding: 5px;
+	border: 1px solid white;	
+	display: none;
+	background-color: rgba(0, 0, 0, 0.5);
+	text-align: center;
+	z-index: 2;
+	color: white;
+}
+
+input[type="submit"] {
+	margin-left: 50px;
+}
+
+/*************** MEDIA *************/
+@media screen and (max-width: 800px) {
+	#wrapper {
+		width: 750px;
+	}
+	#header img[alt="logo"] {
+		margin-left: 180px;
+	}
+	#content {
+		width: 560px;
+	}
+	#content img {
+		float: none;
+	}
+	#contacts {
+		min-width: 150px;
+	}
+	.post ul#gallery > li > img, ul#gallery > li{
+		width: 154px;
+		height: 154px;
+	}
+	.post ul#gallery .big-img {
+		max-width: 250px;
+	}
+	.post ul#gallery .big-img img {
+		max-width: 220px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#wrapper {
+		width: 460px;
+	}
+	#header img[alt="logo"] {
+		margin-left: 28px;
+	}
+	#content {
+		width: 448px;
+	}
+	#contacts {
+		clear: both;
+		width: 100%;
+		margin: 0;
+		border-left: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.5);
+	}
+	.post ul#gallery .big-img {
+		top: -164px;
+	}
+	.post ul#gallery > li > img, ul#gallery > li{
+		width: 160px;
+		height: 160px;
+	}
+	.post ul#gallery > li {
+		margin-left: 15px;
+		margin-right: 16px;
+	}
+}
+/****************************/

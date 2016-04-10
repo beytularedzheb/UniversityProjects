@@ -1,0 +1,5388 @@
+ABSTRACTFACADE.JAVA
+
+package energo.facades;
+
+import java.util.List;
+import javax.persistence.EntityManager;
+
+public abstract class AbstractFacade<T> {
+    private Class<T> entityClass;
+
+    public AbstractFacade(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    protected abstract EntityManager getEntityManager();
+
+    public void create(T entity) {
+        getEntityManager().persist(entity);
+        getEntityManager().flush();
+    }
+
+    public void edit(T entity) {
+        getEntityManager().merge(entity);
+    }
+
+    public void remove(T entity) {
+        getEntityManager().remove(getEntityManager().merge(entity));
+    }
+
+    public T find(Object id) {
+        return getEntityManager().find(entityClass, id);
+    }
+
+    public List<T> findAll() {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    public List<T> findRange(int[] range) {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        q.setMaxResults(range[1] - range[0] + 1);
+        q.setFirstResult(range[0]);
+        return q.getResultList();
+    }
+
+    public int count() {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
+        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
+    
+}
+
+
+ADDRESS.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "addresses")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
+    @NamedQuery(name = "Address.findById", query = "SELECT a FROM Address a WHERE a.id = :id"),
+    @NamedQuery(name = "Address.findByAddress", query = "SELECT a FROM Address a WHERE a.address = :address"),
+    @NamedQuery(name = "Address.findByPostalCode", query = "SELECT a FROM Address a WHERE a.postalCode = :postalCode"),
+    @NamedQuery(name = "Address.findByPhone", query = "SELECT a FROM Address a WHERE a.phone = :phone")})
+public class Address implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String address;
+    private Integer postalCode;
+    //@Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    @Size(max = 50)
+    private String phone;
+    @JoinColumn(name = "cityId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private City city;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    private List<User> userList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    private List<Workplace> workplaceList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    private List<Building> buildingList;
+
+    public Address() {
+    }
+
+    public Address(Integer id) {
+        this.id = id;
+    }
+
+    public Address(Integer id, String address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(Integer postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    @XmlTransient
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    @XmlTransient
+    public List<Workplace> getWorkplaceList() {
+        return workplaceList;
+    }
+
+    public void setWorkplaceList(List<Workplace> workplaceList) {
+        this.workplaceList = workplaceList;
+    }
+
+    @XmlTransient
+    public List<Building> getBuildingList() {
+        return buildingList;
+    }
+
+    public void setBuildingList(List<Building> buildingList) {
+        this.buildingList = buildingList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Address)) {
+            return false;
+        }
+        Address other = (Address) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        // return "energo.models.Address[ id=" + id + " ]";
+        
+        return (this.address 
+            + ", " 
+            + this.city.getCityName() 
+            + ", " 
+            + this.city.getCountry().getCountryName());
+    }
+    
+}
+
+
+ADDRESSCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Address;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.AddressFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.City;
+import energo.models.Country;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "addressController")
+@SessionScoped
+public class AddressController implements Serializable {
+
+    @EJB
+    private energo.facades.AddressFacade ejbFacade;
+    private List<Address> items = null;
+    private Address selected;
+
+    public AddressController() {
+    }
+
+    public Address getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Address selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+        selected.setCity(new City());
+        selected.getCity().setCountry(new Country());
+    }
+
+    private AddressFacade getFacade() {
+        return ejbFacade;
+    }
+    
+    public Address prepareCreate() {
+        selected = new Address();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("AddressCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("AddressUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("AddressDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Address> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else { // DELETE
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Address> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Address> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = Address.class)
+    public static class AddressControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            AddressController controller = (AddressController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "addressController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Address) {
+                Address o = (Address) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Address.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+ADDRESSFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Address;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+@Stateless
+public class AddressFacade extends AbstractFacade<Address> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public AddressFacade() {
+        super(Address.class);
+    }
+    
+}
+
+
+APPLICATIONMESSAGE.JAVA
+
+package energo.i18n;
+
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ApplicationResourceBundle;
+
+public class ApplicationMessage {
+
+    public static ResourceBundle getMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, ApplicationResourceBundle> rb = ApplicationAssociate.getCurrentInstance().getResourceBundles();
+        ApplicationResourceBundle appResBundle = rb.get("msg");
+        return appResBundle.getResourceBundle(context.getViewRoot().getLocale());
+    }
+
+}
+
+
+AUTHENTICATIONFILTER.JAVA
+
+package energo.filters;
+
+import energo.util.Global;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class AuthenticationFilter implements Filter {
+    
+    private static final boolean debug = true;
+
+    private FilterConfig filterConfig = null;
+    
+    private boolean isThereProblemBeforeProcessing;
+    
+    public AuthenticationFilter() {
+    }    
+    
+    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
+            throws IOException, ServletException {
+        if (debug) {
+            log("AuthenticationFilter:DoBeforeProcessing");
+        }
+        
+        isThereProblemBeforeProcessing = false;
+        HttpServletRequest req = (HttpServletRequest) request;
+        String uri = req.getRequestURI();
+
+        if (!uri.contains("javax.faces.resource")
+                && !uri.endsWith(".xhtml")
+                && uri.endsWith("/")) {
+            isThereProblemBeforeProcessing = true;
+        }
+    }    
+    
+    private void doAfterProcessing(ServletRequest request, ServletResponse response)
+            throws IOException, ServletException {
+        if (debug) {
+            log("AuthenticationFilter:DoAfterProcessing");
+        }
+    }
+
+    /**
+     *
+     * @param request The servlet request we are processing
+     * @param response The servlet response we are creating
+     * @param chain The filter chain we are processing
+     *
+     * @exception IOException if an input/output error occurs
+     * @exception ServletException if a servlet error occurs
+     */
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain)
+            throws IOException, ServletException {
+        
+        if (debug) {
+            log("AuthenticationFilter:doFilter()");
+        }
+        
+        doBeforeProcessing(request, response);
+        
+        Throwable problem = null;
+        try {
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
+            HttpSession ses = req.getSession(false);
+            String uri = req.getRequestURI();
+
+            if (isThereProblemBeforeProcessing) {
+                res.sendRedirect(uri + Global.DEFAULT_PAGE.substring(1));
+            }
+            else if (uri.indexOf(req.getContextPath() + Global.DEFAULT_PAGE) >= 0 // consider about this problem
+                || (ses != null && ses.getAttribute(Global.SESSION_USER_EMAIL) != null)
+                || uri.contains("javax.faces.resource")) {
+                    chain.doFilter(request, response);
+            }
+            else {
+                res.sendRedirect(req.getContextPath() + Global.DEFAULT_PAGE);
+            }            
+            
+        } catch (Throwable t) {
+            problem = t;
+            t.printStackTrace();
+        }
+        
+        doAfterProcessing(request, response);
+
+	// If there was a problem, we want to rethrow it if it is
+        // a known type, otherwise log it.
+        if (problem != null) {
+            if (problem instanceof ServletException) {
+                throw (ServletException) problem;
+            }
+            if (problem instanceof IOException) {
+                throw (IOException) problem;
+            }
+            sendProcessingError(problem, response);
+        }
+    }
+
+    /**
+     * Return the filter configuration object for this filter.
+     */
+    public FilterConfig getFilterConfig() {
+        return (this.filterConfig);
+    }
+
+    /**
+     * Set the filter configuration object for this filter.
+     *
+     * @param filterConfig The filter configuration object
+     */
+    public void setFilterConfig(FilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
+    }
+
+    /**
+     * Destroy method for this filter
+     */
+    public void destroy() {        
+    }
+
+    /**
+     * Init method for this filter
+     */
+    public void init(FilterConfig filterConfig) {        
+        this.filterConfig = filterConfig;
+        if (filterConfig != null) {
+            if (debug) {                
+                log("AuthenticationFilter:Initializing filter");
+            }
+        }
+    }
+
+    /**
+     * Return a String representation of this object.
+     */
+    @Override
+    public String toString() {
+        if (filterConfig == null) {
+            return ("AuthenticationFilter()");
+        }
+        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
+        sb.append(filterConfig);
+        sb.append(")");
+        return (sb.toString());
+    }
+    
+    private void sendProcessingError(Throwable t, ServletResponse response) {
+        String stackTrace = getStackTrace(t);        
+        
+        if (stackTrace != null && !stackTrace.equals("")) {
+            try {
+                response.setContentType("text/html");
+                PrintStream ps = new PrintStream(response.getOutputStream());
+                PrintWriter pw = new PrintWriter(ps);                
+                pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
+
+                // PENDING! Localize this for next official release
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
+                pw.print(stackTrace);                
+                pw.print("</pre></body>\n</html>"); //NOI18N
+                pw.close();
+                ps.close();
+                response.getOutputStream().close();
+            } catch (Exception ex) {
+            }
+        } else {
+            try {
+                PrintStream ps = new PrintStream(response.getOutputStream());
+                t.printStackTrace(ps);
+                ps.close();
+                response.getOutputStream().close();
+            } catch (Exception ex) {
+            }
+        }
+    }
+    
+    public static String getStackTrace(Throwable t) {
+        String stackTrace = null;
+        try {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            t.printStackTrace(pw);
+            pw.close();
+            sw.close();
+            stackTrace = sw.getBuffer().toString();
+        } catch (Exception ex) {
+        }
+        return stackTrace;
+    }
+    
+    public void log(String msg) {
+        filterConfig.getServletContext().log(msg);        
+    }
+    
+}
+
+
+BILL.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "bills")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Bill.findAll", query = "SELECT b FROM Bill b"),
+    @NamedQuery(name = "Bill.findById", query = "SELECT b FROM Bill b WHERE b.id = :id"),
+    @NamedQuery(name = "Bill.findByPaid", query = "SELECT b FROM Bill b WHERE b.paid = :paid"),
+    @NamedQuery(name = "Bill.findByDailyUse", query = "SELECT b FROM Bill b WHERE b.dailyUse = :dailyUse"),
+    @NamedQuery(name = "Bill.findByNightlyUse", query = "SELECT b FROM Bill b WHERE b.nightlyUse = :nightlyUse"),
+    @NamedQuery(name = "Bill.findByCustomer", query = "SELECT b FROM Bill b, Building bd WHERE b.electrometer = bd.electrometer and bd.owner = :customer"),
+    @NamedQuery(name = "Bill.findUnpaidByCustomer", query = "SELECT b FROM Bill b, Building bd WHERE b.paid = false and b.electrometer = bd.electrometer and bd.owner = :customer")})
+public class Bill implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    private boolean paid;
+    @Basic(optional = false)
+    @NotNull
+    private int dailyUse;
+    @Basic(optional = false)
+    @NotNull
+    private int nightlyUse;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
+    private List<Payment> paymentList;
+    @JoinColumn(name = "electrometerId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Electrometer electrometer;
+    @JoinColumn(name = "periodId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Period period;
+
+    public Bill() {
+    }
+
+    public Bill(Integer id) {
+        this.id = id;
+    }
+
+    public Bill(Integer id, boolean paid, int dailyUse, int nightlyUse) {
+        this.id = id;
+        this.paid = paid;
+        this.dailyUse = dailyUse;
+        this.nightlyUse = nightlyUse;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+    
+    public int getDailyUse() {
+        return dailyUse;
+    }
+
+    public void setDailyUse(int dailyUse) {
+        this.dailyUse = dailyUse;
+    }
+
+    public int getNightlyUse() {
+        return nightlyUse;
+    }
+
+    public void setNightlyUse(int nightlyUse) {
+        this.nightlyUse = nightlyUse;
+    }
+
+    @XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    public Electrometer getElectrometer() {
+        return electrometer;
+    }
+
+    public void setElectrometer(Electrometer electrometer) {
+        this.electrometer = electrometer;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Bill)) {
+            return false;
+        }
+        Bill other = (Bill) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Bill[ id=" + id + " ]";
+    }
+    
+}
+
+
+BILLCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Bill;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.BillFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Client;
+import energo.models.Tariff;
+import energo.util.SessionUtil;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "billController")
+@SessionScoped
+public class BillController implements Serializable {
+
+/*----------------------------------------------------------------------------*/
+    @ManagedProperty(value = "#{paymentController}")
+    private PaymentController paymentController;
+
+    public void setPaymentController(PaymentController paymentController) {
+        this.paymentController = paymentController;
+    }
+    
+    @ManagedProperty(value = "#{tariffController}")
+    private TariffController tariffController;
+    
+    public void setTariffController(TariffController tariffController) {
+        this.tariffController = tariffController;
+    }
+
+    @ManagedProperty(value = "#{employeeController}")
+    private EmployeeController employeeController;
+    
+    public void setEmployeeController(EmployeeController employeeController) {
+        this.employeeController = employeeController;
+    }
+/*----------------------------------------------------------------------------*/
+
+    
+    @EJB
+    private energo.facades.BillFacade ejbFacade;
+    private List<Bill> items = null;
+    private Bill selected;
+
+    public BillController() {
+    }
+
+    public Bill getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Bill selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private BillFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Bill prepareCreate() {
+        selected = new Bill();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("BillCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("BillUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("BillDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Bill> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Bill> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Bill> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public List<Bill> getItemsByCustomer(Client customer, boolean onlyUnpaid) {
+        return onlyUnpaid ? getFacade().findUnpaidByCustomer(customer) : getFacade().findByCustomer(customer);
+    }
+    
+    public void payBill() {
+        selected.setPaid(true);
+        update();
+        paymentController.prepareCreate();
+        paymentController.getSelected().setBill(selected);
+        paymentController
+                .getSelected()
+                .setAmount(calculateAmount(selected, 
+                        tariffController.getDefaultTariff()));
+        paymentController.getSelected().setEmployee(employeeController.getEmployeeBy(SessionUtil.loggedInUser()));
+        paymentController.getSelected().setDateOfPayment(Calendar.getInstance().getTime());
+        paymentController.create();
+        
+        selected = null;
+        paymentController.setSelected(null);
+    }
+    
+    private BigDecimal calculateAmount(Bill bill, Tariff tariff) {
+        BigDecimal op1 = tariff.getDailyTariff().multiply(new BigDecimal(bill.getDailyUse()));
+        BigDecimal op2 = tariff.getNightlyTariff().multiply(new BigDecimal(bill.getNightlyUse()));
+        return op1.add(op2);
+    }
+
+    @FacesConverter(forClass = Bill.class)
+    public static class BillControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            BillController controller = (BillController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "billController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Bill) {
+                Bill o = (Bill) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Bill.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+BILLFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Bill;
+import energo.models.Client;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class BillFacade extends AbstractFacade<Bill> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public BillFacade() {
+        super(Bill.class);
+    }
+    
+    public List<Bill> findByCustomer(Client customer) {
+        try {
+            return em.createNamedQuery("Bill.findByCustomer", Bill.class)
+                    .setParameter("customer", customer).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Bill> findUnpaidByCustomer(Client customer) {
+        try {
+            return em.createNamedQuery("Bill.findUnpaidByCustomer", Bill.class)
+                    .setParameter("customer", customer).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+}
+
+
+BUILDING.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Entity
+@Table(name = "buildings")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Building.findAll", query = "SELECT b FROM Building b"),
+    @NamedQuery(name = "Building.findById", query = "SELECT b FROM Building b WHERE b.id = :id"),
+    @NamedQuery(name = "Building.findByOwner", query = "SELECT b FROM Building b WHERE b.owner = :owner")})
+public class Building implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @JoinColumn(name = "addressId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Address address;
+    @JoinColumn(name = "ownerId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Client owner;
+    @JoinColumn(name = "electrometerId", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private Electrometer electrometer;
+
+    public Building() {
+    }
+
+    public Building(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Client getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Client owner) {
+        this.owner = owner;
+    }
+
+    public Electrometer getElectrometer() {
+        return electrometer;
+    }
+
+    public void setElectrometer(Electrometer electrometer) {
+        this.electrometer = electrometer;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Building)) {
+            return false;
+        }
+        Building other = (Building) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Building[ id=" + id + " ]";
+    }
+    
+}
+
+
+BUILDINGCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Building;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.BuildingFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Client;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "buildingController")
+@SessionScoped
+public class BuildingController implements Serializable {
+
+    @EJB
+    private energo.facades.BuildingFacade ejbFacade;
+    private List<Building> items = null;
+    private Building selected;
+
+    public BuildingController() {
+    }
+
+    public Building getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Building selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private BuildingFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Building prepareCreate() {
+        selected = new Building();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("BuildingCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("BuildingUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("BuildingDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Building> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Building> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Building> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public List<Building> findByOwner(Client owner) {
+        return getFacade().findByOwner(owner);
+    }
+
+    @FacesConverter(forClass = Building.class)
+    public static class BuildingControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            BuildingController controller = (BuildingController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "buildingController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Building) {
+                Building o = (Building) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Building.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+BUILDINGFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Building;
+import energo.models.Client;
+import energo.models.User;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class BuildingFacade extends AbstractFacade<Building> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public BuildingFacade() {
+        super(Building.class);
+    }
+    
+    public List<Building> findByOwner(Client owner) {
+        try {
+            return em.createNamedQuery("Building.findByOwner", Building.class)
+                    .setParameter("owner", owner).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+}
+
+
+CITY.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "cities")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "City.findAll", query = "SELECT c FROM City c"),
+    @NamedQuery(name = "City.findById", query = "SELECT c FROM City c WHERE c.id = :id"),
+    @NamedQuery(name = "City.findByCityName", query = "SELECT c FROM City c WHERE c.cityName = :cityName")})
+public class City implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 80)
+    private String cityName;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
+    private List<Address> addressList;
+    @JoinColumn(name = "countryCode", referencedColumnName = "code")
+    @ManyToOne(optional = false)
+    private Country country;
+
+    public City() {
+    }
+
+    public City(Integer id) {
+        this.id = id;
+    }
+
+    public City(Integer id, String cityName) {
+        this.id = id;
+        this.cityName = cityName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    @XmlTransient
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof City)) {
+            return false;
+        }
+        City other = (City) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.City[ id=" + id + " ]";
+    }
+    
+}
+
+
+CITYCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.City;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.CityFacade;
+import energo.i18n.ApplicationMessage;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "cityController")
+@SessionScoped
+public class CityController implements Serializable {
+
+    @EJB
+    private energo.facades.CityFacade ejbFacade;
+    private List<City> items = null;
+    private City selected;    
+
+    public CityController() {
+    }
+
+    public City getSelected() {
+        return selected;
+    }
+
+    public void setSelected(City selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private CityFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public City prepareCreate() {
+        selected = new City();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("CityCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("CityUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("CityDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<City> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<City> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<City> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public List<City> getItemsAvailableByCountry(String countryCode) {
+        List<City> list = new ArrayList<>();
+
+        for (City c : getItems()) {
+            if (c.getCountry().getCode().equals(countryCode)) {
+                list.add(c);
+            }
+        }
+        return list;
+    }
+
+    @FacesConverter(forClass = City.class)
+    public static class CityControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            CityController controller = (CityController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "cityController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof City) {
+                City o = (City) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), City.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+CITYFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.City;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class CityFacade extends AbstractFacade<City> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public CityFacade() {
+        super(City.class);
+    }
+    
+    public List<City> findByCountryCode(String countryCode) {
+        return em.createNamedQuery("City.findByCountryCode", City.class)
+                .setParameter("countryCode", countryCode).getResultList();
+    }
+}
+
+
+CLIENT.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "clients")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c"),
+    @NamedQuery(name = "Client.findById", query = "SELECT c FROM Client c WHERE c.id = :id"),
+    @NamedQuery(name = "Client.findByUserEmail", query = "SELECT c FROM Client c WHERE c.idUser.emailAddress = :emailAddress")})
+public class Client implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+    @Basic(optional = false)
+    private Integer id;
+    @JoinColumn(name = "id_user", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private User idUser;
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+    private List<Payment> paymentList;*/
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private List<Building> buildingList;
+
+    public Client() {
+    }
+
+    public Client(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(User idUser) {
+        this.idUser = idUser;
+    }
+
+    /*@XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }*/
+
+    @XmlTransient
+    public List<Building> getBuildingList() {
+        return buildingList;
+    }
+
+    public void setBuildingList(List<Building> buildingList) {
+        this.buildingList = buildingList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Client)) {
+            return false;
+        }
+        Client other = (Client) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Client[ id=" + id + " ]";
+    }
+    
+}
+
+
+CLIENTCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Client;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.ClientFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Address;
+import energo.models.City;
+import energo.models.User;
+import energo.util.Global;
+import energo.util.SessionUtil;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "clientController")
+@SessionScoped
+public class ClientController implements Serializable {
+
+/*----------------------------------------------------------------------------*/
+    @ManagedProperty(value="#{userController}")
+    private UserController userController;
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+    
+    @ManagedProperty(value="#{addressController}")
+    private AddressController addressController;
+
+    public void setAddressController(AddressController addressController) {
+        this.addressController = addressController;
+    }
+/*----------------------------------------------------------------------------*/
+    
+    @EJB
+    private energo.facades.ClientFacade ejbFacade;
+    private List<Client> items = null;
+    private Client selected;
+
+    private List<Client> filteredClients;
+    
+    public List<Client> getFilteredClients() {
+        return filteredClients;
+    }
+
+    public void setFilteredClients(List<Client> filteredClients) {
+        this.filteredClients = filteredClients;
+    }
+    
+    public ClientController() {
+    }
+
+    public Client getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Client selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {               
+    }
+
+    protected void initializeEmbeddableKey() {
+        selected.setIdUser(new User());
+        selected.getIdUser().setAddress(new Address());
+        selected.getIdUser().getAddress().setCity(new City());
+    }
+/*----------------------------------------------------------------------------*/    
+    private void createRelatedRecords() {
+        addressController.setSelected(selected.getIdUser().getAddress());
+        addressController.create();
+        
+        userController.setSelected(selected.getIdUser());
+        userController.create();
+        
+        selected.getIdUser().setClient(selected);
+    }
+    
+    private void updateRelatedRecords() {
+        addressController.setSelected(selected.getIdUser().getAddress());
+        addressController.update();
+        userController.setSelected(selected.getIdUser());
+        userController.update();
+    }
+    
+    private void destroyRelatedRecords() {
+        userController.setSelected(selected.getIdUser());
+        userController.destroy();
+    }
+/*----------------------------------------------------------------------------*/
+    
+    private ClientFacade getFacade() {
+        return ejbFacade;
+    }
+    
+    public Client prepareCreate() {
+        selected = new Client();                
+        initializeEmbeddableKey();
+        return selected;
+    }
+    
+    public void create() {
+        selected.getIdUser().setUserType(Global.USER_TYPE_CLIENT);
+        createRelatedRecords();
+        
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("ClientCreated"));       
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;       // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        updateRelatedRecords();
+        
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("ClientUpdated"));
+    }
+
+    public void destroy() {
+        destroyRelatedRecords();
+        //selected.getIdUser().setClient(null);
+        /*persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("ClientDeleted"));
+        if (!JsfUtil.isValidationFailed()) {*/
+            selected = null;    // Remove selection
+            items = null;       // Invalidate list of items to trigger re-query.
+        //}
+    }
+
+    public List<Client> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                    addressController.setSelected(null);
+                    userController.setSelected(null);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                    userController.setSelected(null);
+                } else { // DELETE
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Client> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Client> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public Client getCustomerBy(String emailAddress) {
+        return getFacade().findByUserEmail(emailAddress);        
+    }
+    
+    public Client getCurrentLoggedInClient() {
+        return getCustomerBy(SessionUtil.loggedInUser());
+    }
+
+    @FacesConverter(forClass = Client.class)
+    public static class ClientControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            ClientController controller = (ClientController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "clientController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Client) {
+                Client o = (Client) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Client.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+CLIENTFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Client;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class ClientFacade extends AbstractFacade<Client> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;        
+    }
+
+    public ClientFacade() {
+        super(Client.class);
+    }
+
+    public Client findByUserEmail(String emailAddress) {
+        try {
+            return em.createNamedQuery("Client.findByUserEmail", Client.class)
+                    .setParameter("emailAddress", emailAddress).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+}
+
+
+COUNTRY.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "countries")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Country.findAll", query = "SELECT c FROM Country c"),
+    @NamedQuery(name = "Country.findByCode", query = "SELECT c FROM Country c WHERE c.code = :code"),
+    @NamedQuery(name = "Country.findByCountryName", query = "SELECT c FROM Country c WHERE c.countryName = :countryName"),
+    @NamedQuery(name = "Country.findByContinent", query = "SELECT c FROM Country c WHERE c.continent = :continent")})
+public class Country implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 3)
+    private String code;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 80)
+    private String countryName;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 13)
+    private String continent;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
+    private List<City> cityList;
+
+    public Country() {
+    }
+
+    public Country(String code) {
+        this.code = code;
+    }
+
+    public Country(String code, String countryName, String continent) {
+        this.code = code;
+        this.countryName = countryName;
+        this.continent = continent;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getContinent() {
+        return continent;
+    }
+
+    public void setContinent(String continent) {
+        this.continent = continent;
+    }
+
+    @XmlTransient
+    public List<City> getCityList() {
+        return cityList;
+    }
+
+    public void setCityList(List<City> cityList) {
+        this.cityList = cityList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (code != null ? code.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Country)) {
+            return false;
+        }
+        Country other = (Country) object;
+        if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Country[ code=" + code + " ]";
+    }
+    
+}
+
+
+COUNTRYCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Country;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.CountryFacade;
+import energo.i18n.ApplicationMessage;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "countryController")
+@SessionScoped
+public class CountryController implements Serializable {
+
+    @EJB
+    private energo.facades.CountryFacade ejbFacade;
+    private List<Country> items = null;
+    private Country selected;
+
+    public CountryController() {
+    }
+
+    public Country getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Country selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private CountryFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Country prepareCreate() {
+        selected = new Country();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("CountryCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("CountryUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("CountryDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Country> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Country> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Country> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = Country.class)
+    public static class CountryControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            CountryController controller = (CountryController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "countryController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.String getKey(String value) {
+            java.lang.String key;
+            key = value;
+            return key;
+        }
+
+        String getStringKey(java.lang.String value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Country) {
+                Country o = (Country) object;
+                return getStringKey(o.getCode());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Country.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+COUNTRYFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Country;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class CountryFacade extends AbstractFacade<Country> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public CountryFacade() {
+        super(Country.class);
+    }
+    
+}
+
+
+ELECTROMETER.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "electrometers")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Electrometer.findAll", query = "SELECT e FROM Electrometer e"),
+    @NamedQuery(name = "Electrometer.findById", query = "SELECT e FROM Electrometer e WHERE e.id = :id"),
+    @NamedQuery(name = "Electrometer.findByNumber", query = "SELECT e FROM Electrometer e WHERE e.number = :number")})
+public class Electrometer implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    private long number;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "electrometer")
+    private Building building;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "electrometer")
+    private List<Bill> billList;
+
+    public Electrometer() {
+    }
+
+    public Electrometer(Integer id) {
+        this.id = id;
+    }
+
+    public Electrometer(Integer id, long number) {
+        this.id = id;
+        this.number = number;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    @XmlTransient
+    public List<Bill> getBillList() {
+        return billList;
+    }
+
+    public void setBillList(List<Bill> billList) {
+        this.billList = billList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Electrometer)) {
+            return false;
+        }
+        Electrometer other = (Electrometer) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Electrometer[ id=" + id + " ]";
+    }
+    
+}
+
+
+ELECTROMETERCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Electrometer;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.ElectrometerFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Address;
+import energo.models.Building;
+import energo.models.City;
+import energo.models.Client;
+import energo.models.Country;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "electrometerController")
+@SessionScoped
+public class ElectrometerController implements Serializable {
+
+/*----------------------------------------------------------------------------*/
+    @ManagedProperty(value = "#{buildingController}")
+    private BuildingController buildingController;
+
+    public void setBuildingController(BuildingController buildingController) {
+        this.buildingController = buildingController;
+    }
+    
+    @ManagedProperty(value = "#{addressController}")
+    private AddressController addressController;
+
+    public void setAddressController(AddressController addressController) {
+        this.addressController = addressController;
+    }
+    
+    @ManagedProperty(value = "#{clientController}")
+    private ClientController clientController;
+
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
+    }
+/*----------------------------------------------------------------------------*/
+
+    @EJB
+    private energo.facades.ElectrometerFacade ejbFacade;
+    private List<Electrometer> items = null;
+    private Electrometer selected;
+
+    public ElectrometerController() {
+    }
+
+    public Electrometer getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Electrometer selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+        addressController.setSelected(selected.getBuilding().getAddress());
+        addressController.create();
+        buildingController.prepareCreate();
+        buildingController.getSelected().setElectrometer(selected);
+        buildingController.getSelected().setOwner(clientController.getSelected());
+        buildingController.getSelected().setAddress(addressController.getSelected());
+        selected.setBuilding(buildingController.getSelected());
+    }
+
+    protected void initializeEmbeddableKey() {
+        selected.setBuilding(new Building());
+        selected.getBuilding().setAddress(new Address());
+        selected.getBuilding().getAddress().setCity(new City());
+        selected.getBuilding().getAddress().getCity().setCountry(new Country());
+    }
+
+    private ElectrometerFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Electrometer prepareCreate() {
+        selected = new Electrometer();       
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("ElectrometerCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("ElectrometerUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("ElectrometerDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Electrometer> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            if (persistAction == PersistAction.CREATE) {
+                setEmbeddableKeys();
+            }
+            try {
+                if (persistAction == PersistAction.CREATE) {                   
+                    getFacade().create(selected);
+                    buildingController.setSelected(null);
+                    addressController.setSelected(null);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    addressController.setSelected(selected.getBuilding().getAddress());
+                    addressController.update();
+                    getFacade().edit(selected);
+                    addressController.setSelected(null);
+                } else {
+                    getFacade().remove(selected);
+                    addressController.setSelected(selected.getBuilding().getAddress());
+                    addressController.destroy();
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Electrometer> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Electrometer> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public List<Electrometer> getItemsByOwner(Client owner) {
+        if (owner != null) {
+            List<Electrometer> result = new ArrayList<>();
+            for (Building b : buildingController.findByOwner(owner)) {
+                for (Electrometer e : getFacade().findAll()) {
+                    if (Objects.equals(b.getElectrometer().getId(), e.getId())) {
+                        result.add(e);
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+        return null;
+    }
+
+    @FacesConverter(forClass = Electrometer.class)
+    public static class ElectrometerControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            ElectrometerController controller = (ElectrometerController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "electrometerController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Electrometer) {
+                Electrometer o = (Electrometer) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Electrometer.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+ELECTROMETERFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Electrometer;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class ElectrometerFacade extends AbstractFacade<Electrometer> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public ElectrometerFacade() {
+        super(Electrometer.class);
+    }
+    
+}
+
+
+EMAILVALIDATOR.JAVA
+
+package energo.validators;
+
+import java.util.Map;
+import java.util.regex.Pattern;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.FacesValidator;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
+import org.primefaces.validate.ClientValidator;
+ 
+/**
+ * Custom JSF Validator for Email input
+ */
+@FacesValidator("custom.emailValidator")
+public class EmailValidator implements Validator, ClientValidator {
+ 
+    private Pattern pattern;
+  
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                                                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+  
+    public EmailValidator() {
+        pattern = Pattern.compile(EMAIL_PATTERN);
+    }
+ 
+    @Override
+    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        if (value == null) {
+            return;
+        }
+         
+        if (!pattern.matcher(value.toString()).matches()) {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Validation Error", 
+                        value + " is not a valid email;"));
+        }
+    }
+ 
+    @Override
+    public Map<String, Object> getMetadata() {
+        return null;
+    }
+ 
+    @Override
+    public String getValidatorId() {
+        return "custom.emailValidator";
+    }
+     
+}
+
+EMPLOYEE.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "employees")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
+    @NamedQuery(name = "Employee.findById", query = "SELECT e FROM Employee e WHERE e.id = :id"),
+    @NamedQuery(name = "Employee.findByUserEmail", query = "SELECT e FROM Employee e WHERE e.idUser.emailAddress = :emailAddress")})
+public class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Basic(optional = false)
+    private Integer id;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private List<Payment> paymentList;
+    @JoinColumn(name = "id_user", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private User idUser;
+    @JoinColumn(name = "workplaceId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Workplace workplace;
+
+    public Employee() {
+    }
+
+    public Employee(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    public User getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(User idUser) {
+        this.idUser = idUser;
+    }
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Employee)) {
+            return false;
+        }
+        Employee other = (Employee) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Employee[ id=" + id + " ]";
+    }
+    
+}
+
+
+EMPLOYEECONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Employee;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.EmployeeFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Address;
+import energo.models.City;
+import energo.models.User;
+import energo.util.Global;
+import energo.util.SessionUtil;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "employeeController")
+@SessionScoped
+public class EmployeeController implements Serializable {
+    
+/*----------------------------------------------------------------------------*/
+    @ManagedProperty(value="#{userController}")
+    private UserController userController;
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+    
+    @ManagedProperty(value="#{addressController}")
+    private AddressController addressController;
+
+    public void setAddressController(AddressController addressController) {
+        this.addressController = addressController;
+    }
+/*----------------------------------------------------------------------------*/
+    
+    @EJB
+    private energo.facades.EmployeeFacade ejbFacade;       
+    private List<Employee> items = null;
+    private Employee selected;
+    
+    public EmployeeController() {
+    }
+
+    public Employee getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Employee selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+        selected.getIdUser().setEmployee(selected);
+    }
+
+    protected void initializeEmbeddableKey() {
+        selected.setIdUser(new User());
+        selected.getIdUser().setAddress(new Address());
+        selected.getIdUser().getAddress().setCity(new City());        
+    }
+/*----------------------------------------------------------------------------*/    
+    private void createRelatedRecords() {
+        addressController.setSelected(selected.getIdUser().getAddress());
+        addressController.create();
+        
+        userController.setSelected(selected.getIdUser());
+        userController.create();
+        
+        selected.getIdUser().setEmployee(selected);
+    }
+    
+    private void updateRelatedRecords() {
+        addressController.setSelected(selected.getIdUser().getAddress());
+        addressController.update();
+        userController.setSelected(selected.getIdUser());
+        userController.update();
+    }
+    
+    private void destroyRelatedRecords() {
+        userController.setSelected(selected.getIdUser());
+        userController.destroy();
+    }
+/*----------------------------------------------------------------------------*/
+    private EmployeeFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Employee prepareCreate() {
+        selected = new Employee();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        selected.getIdUser().setUserType(Global.USER_TYPE_EMPLOYEE);
+        createRelatedRecords();        
+        
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("EmployeeCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        updateRelatedRecords();
+                
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("EmployeeUpdated"));
+    }
+
+    public void destroy() {
+        destroyRelatedRecords();
+        //persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("EmployeeDeleted"));
+        //if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        //}
+    }
+
+    public List<Employee> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                    addressController.setSelected(null);
+                    userController.setSelected(null);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                    userController.setSelected(null);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Employee> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Employee> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public Employee getEmployeeBy(String emailAddress) {
+        return getFacade().findByUserEmail(emailAddress);        
+    }
+    
+    public Employee getCurrentLoggedInEmployee() {
+        return getEmployeeBy(SessionUtil.loggedInUser());
+    }
+    
+    @FacesConverter(forClass = Employee.class)
+    public static class EmployeeControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            EmployeeController controller = (EmployeeController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "employeeController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Employee) {
+                Employee o = (Employee) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Employee.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+EMPLOYEEFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Employee;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class EmployeeFacade extends AbstractFacade<Employee> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public EmployeeFacade() {
+        super(Employee.class);
+    }
+    
+    public Employee findByUserEmail(String emailAddress) {
+        try {
+            return em.createNamedQuery("Employee.findByUserEmail", Employee.class)
+                    .setParameter("emailAddress", emailAddress).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+}
+
+
+GLOBAL.JAVA
+
+package energo.util;
+
+public class Global {
+    public final static String SESSION_USER_EMAIL = "user_email";
+    public final static String USER_TYPE_ADMIN = "admin";
+    public final static String USER_TYPE_CLIENT = "client";
+    public final static String USER_TYPE_EMPLOYEE = "employee";
+    
+    public final static String ADMIN_DEFAULT_PAGE = "/admin/index.xhtml";
+    public final static String EMPLOYEE_DEFAULT_PAGE = "/employee/index.xhtml";
+    public final static String CLIENT_DEFAULT_PAGE = "/client/index.xhtml";
+    public final static String DEFAULT_PAGE = "/index.xhtml";
+}
+
+
+JSFUTIL.JAVA
+
+package energo.util;
+
+import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.model.SelectItem;
+
+public class JsfUtil {
+
+    public static SelectItem[] getSelectItems(List<?> entities, boolean selectOne) {
+        int size = selectOne ? entities.size() + 1 : entities.size();
+        SelectItem[] items = new SelectItem[size];
+        int i = 0;
+        if (selectOne) {
+            items[0] = new SelectItem("", "---");
+            i++;
+        }
+        for (Object x : entities) {
+            items[i++] = new SelectItem(x, x.toString());
+        }
+        return items;
+    }
+
+    public static boolean isValidationFailed() {
+        return FacesContext.getCurrentInstance().isValidationFailed();
+    }
+
+    public static void addErrorMessage(Exception ex, String defaultMsg) {
+        String msg = ex.getLocalizedMessage();
+        if (msg != null && msg.length() > 0) {
+            addErrorMessage(msg);
+        } else {
+            addErrorMessage(defaultMsg);
+        }
+    }
+
+    public static void addErrorMessages(List<String> messages) {
+        for (String message : messages) {
+            addErrorMessage(message);
+        }
+    }
+
+    public static void addErrorMessage(String msg) {
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesContext.getCurrentInstance().validationFailed();
+    }
+
+    public static void addSuccessMessage(String msg) {
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+        FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+    }
+
+    public static String getRequestParameter(String key) {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(key);
+    }
+
+    public static Object getObjectFromRequestParameter(String requestParameterName, Converter converter, UIComponent component) {
+        String theId = JsfUtil.getRequestParameter(requestParameterName);
+        return converter.getAsObject(FacesContext.getCurrentInstance(), component, theId);
+    }
+
+    public static enum PersistAction {
+
+        CREATE,
+        DELETE,
+        UPDATE
+    }
+}
+
+
+LANGUAGECONTROLLER.JAVA
+
+package energo.controllers;
+
+import java.io.Serializable;
+import java.util.Locale;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+@ManagedBean(name = "languageController")
+@SessionScoped
+public class LanguageController implements Serializable {
+    
+    private Locale locale;
+
+    @PostConstruct
+    public void init() {
+        locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        setLanguage("bg");
+    }
+    
+    public LanguageController() {
+        
+    }
+    
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public String getLanguage() {
+        return locale.getLanguage();
+    }
+
+    public void setLanguage(String language) {
+        this.locale = new Locale(language);
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+    }
+    
+}
+
+
+LANGUAGESCONST.JAVA
+
+package energo.i18n;
+
+public class LanguagesConst {
+    public static final String ENGLISH      = "/energo/i18n/bundle_en";
+    public static final String BULGARIAN    = "/energo/i18n/bundle_bg";
+    public static final String DEFAULT      = BULGARIAN;
+}
+
+
+MD5HASHING.JAVA
+
+package energo.util;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class MD5Hashing {
+
+    public static String getMD5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+            // Now we need to zero pad it if you actually want the full 32 chars.
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+}
+
+
+PAYMENT.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Entity
+@Table(name = "payments")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
+    @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
+    @NamedQuery(name = "Payment.findByAmount", query = "SELECT p FROM Payment p WHERE p.amount = :amount"),
+    @NamedQuery(name = "Payment.findByDateOfPayment", query = "SELECT p FROM Payment p WHERE p.dateOfPayment = :dateOfPayment"),
+    @NamedQuery(name = "Payment.findByAnnulled", query = "SELECT p FROM Payment p WHERE p.annulled = :annulled")})
+public class Payment implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    private BigDecimal amount;
+    @Basic(optional = false)
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfPayment;
+    @Basic(optional = false)
+    @NotNull
+    private boolean annulled;
+    @JoinColumn(name = "billId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Bill bill;
+    @JoinColumn(name = "employeeId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Employee employee;
+
+    public Payment() {
+    }
+
+    public Payment(Integer id) {
+        this.id = id;
+    }
+
+    public Payment(Integer id, BigDecimal amount, Date dateOfPayment, boolean annulled) {
+        this.id = id;
+        this.amount = amount;
+        this.dateOfPayment = dateOfPayment;
+        this.annulled = annulled;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Date getDateOfPayment() {
+        return dateOfPayment;
+    }
+
+    public void setDateOfPayment(Date dateOfPayment) {
+        this.dateOfPayment = dateOfPayment;
+    }
+
+    public boolean getAnnulled() {
+        return annulled;
+    }
+
+    public void setAnnulled(boolean annulled) {
+        this.annulled = annulled;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Payment)) {
+            return false;
+        }
+        Payment other = (Payment) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Payment[ id=" + id + " ]";
+    }
+    
+}
+
+
+PAYMENTCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Payment;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.PaymentFacade;
+import energo.i18n.ApplicationMessage;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "paymentController")
+@SessionScoped
+public class PaymentController implements Serializable {
+
+    @EJB
+    private energo.facades.PaymentFacade ejbFacade;
+    private List<Payment> items = null;
+    private Payment selected;
+
+    public PaymentController() {
+    }
+
+    public Payment getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Payment selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private PaymentFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Payment prepareCreate() {
+        selected = new Payment();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("PaymentCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("PaymentUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("PaymentDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Payment> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Payment> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Payment> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = Payment.class)
+    public static class PaymentControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            PaymentController controller = (PaymentController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "paymentController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Payment) {
+                Payment o = (Payment) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Payment.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+PAYMENTFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Payment;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class PaymentFacade extends AbstractFacade<Payment> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public PaymentFacade() {
+        super(Payment.class);
+    }
+    
+}
+
+
+PERIOD.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "periods")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Period.findAll", query = "SELECT p FROM Period p"),
+    @NamedQuery(name = "Period.findById", query = "SELECT p FROM Period p WHERE p.id = :id"),
+    @NamedQuery(name = "Period.findByDateFrom", query = "SELECT p FROM Period p WHERE p.dateFrom = :dateFrom"),
+    @NamedQuery(name = "Period.findByDateTo", query = "SELECT p FROM Period p WHERE p.dateTo = :dateTo")})
+public class Period implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateFrom;
+    @Basic(optional = false)
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "period")
+    private List<Bill> billList;
+
+    public Period() {
+    }
+
+    public Period(Integer id) {
+        this.id = id;
+    }
+
+    public Period(Integer id, Date dateFrom, Date dateTo) {
+        this.id = id;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    @XmlTransient
+    public List<Bill> getBillList() {
+        return billList;
+    }
+
+    public void setBillList(List<Bill> billList) {
+        this.billList = billList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Period)) {
+            return false;
+        }
+        Period other = (Period) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Period[ id=" + id + " ]";
+    }
+    
+}
+
+
+PERIODCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Period;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.PeriodFacade;
+import energo.i18n.ApplicationMessage;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "periodController")
+@SessionScoped
+public class PeriodController implements Serializable {
+
+    @EJB
+    private energo.facades.PeriodFacade ejbFacade;
+    private List<Period> items = null;
+    private Period selected;
+
+    public PeriodController() {
+    }
+
+    public Period getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Period selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private PeriodFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Period prepareCreate() {
+        selected = new Period();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("PeriodCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("PeriodUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("PeriodDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Period> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Period> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Period> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = Period.class)
+    public static class PeriodControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            PeriodController controller = (PeriodController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "periodController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Period) {
+                Period o = (Period) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Period.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+PERIODFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Period;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class PeriodFacade extends AbstractFacade<Period> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public PeriodFacade() {
+        super(Period.class);
+    }
+    
+}
+
+
+SESSIONUTIL.JAVA
+
+package energo.util;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+public class SessionUtil {
+    public static HttpSession getSession() {
+        return (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(false);
+    }
+ 
+    public static HttpServletRequest getRequest() {
+        return (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+    }
+    
+    public static String loggedInUser() {
+        return getSession().getAttribute(Global.SESSION_USER_EMAIL).toString();
+    }
+   
+}
+
+
+TARIFF.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Entity
+@Table(name = "tariffs")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tariff.findAll", query = "SELECT t FROM Tariff t"),
+    @NamedQuery(name = "Tariff.findById", query = "SELECT t FROM Tariff t WHERE t.id = :id"),
+    @NamedQuery(name = "Tariff.findByDailyTariff", query = "SELECT t FROM Tariff t WHERE t.dailyTariff = :dailyTariff"),
+    @NamedQuery(name = "Tariff.findByNightlyTariff", query = "SELECT t FROM Tariff t WHERE t.nightlyTariff = :nightlyTariff")})
+public class Tariff implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    private BigDecimal dailyTariff;
+    @Basic(optional = false)
+    @NotNull
+    private BigDecimal nightlyTariff;
+
+    public Tariff() {
+    }
+
+    public Tariff(Integer id) {
+        this.id = id;
+    }
+
+    public Tariff(Integer id, BigDecimal dailyTariff, BigDecimal nightlyTariff) {
+        this.id = id;
+        this.dailyTariff = dailyTariff;
+        this.nightlyTariff = nightlyTariff;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public BigDecimal getDailyTariff() {
+        return dailyTariff;
+    }
+
+    public void setDailyTariff(BigDecimal dailyTariff) {
+        this.dailyTariff = dailyTariff;
+    }
+
+    public BigDecimal getNightlyTariff() {
+        return nightlyTariff;
+    }
+
+    public void setNightlyTariff(BigDecimal nightlyTariff) {
+        this.nightlyTariff = nightlyTariff;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tariff)) {
+            return false;
+        }
+        Tariff other = (Tariff) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Tariff[ id=" + id + " ]";
+    }
+    
+}
+
+
+TARIFFCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Tariff;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.TariffFacade;
+import energo.i18n.ApplicationMessage;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "tariffController")
+@SessionScoped
+public class TariffController implements Serializable {
+
+    @EJB
+    private energo.facades.TariffFacade ejbFacade;
+    private List<Tariff> items = null;
+    private Tariff selected;
+
+    public TariffController() {
+    }
+
+    public Tariff getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Tariff selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private TariffFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Tariff prepareCreate() {
+        selected = new Tariff();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("TariffCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("TariffUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("TariffDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Tariff> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Tariff> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Tariff> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public Tariff getDefaultTariff() {
+        if (getItems() != null && getItems().size() > 0) {
+            return getItems().get(0);
+        }
+        return null;
+    }
+
+    @FacesConverter(forClass = Tariff.class)
+    public static class TariffControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            TariffController controller = (TariffController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "tariffController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Tariff) {
+                Tariff o = (Tariff) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Tariff.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+TARIFFFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Tariff;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class TariffFacade extends AbstractFacade<Tariff> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public TariffFacade() {
+        super(Tariff.class);
+    }
+    
+}
+
+
+TEXT.JAVA
+
+package energo.i18n;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+
+import javax.faces.context.FacesContext;
+
+public class Text extends ResourceBundle {
+
+    protected static final String BUNDLE_NAME = "energo.i18n.text";
+    protected static final String BUNDLE_EXTENSION = "properties";
+    protected static final Control UTF8_CONTROL = new UTF8Control();
+
+    public Text() {
+        setParent(ResourceBundle.getBundle(BUNDLE_NAME, 
+            FacesContext.getCurrentInstance().getViewRoot().getLocale(), UTF8_CONTROL));
+    }
+
+    @Override
+    protected Object handleGetObject(String key) {
+        return parent.getObject(key);
+    }
+
+    @Override
+    public Enumeration getKeys() {
+        return parent.getKeys();
+    }
+
+    protected static class UTF8Control extends Control {
+        public ResourceBundle newBundle
+            (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+                throws IllegalAccessException, InstantiationException, IOException
+        {
+            // The below code is copied from default Control#newBundle() implementation.
+            // Only the PropertyResourceBundle line is changed to read the file as UTF-8.
+            String bundleName = toBundleName(baseName, locale);
+            String resourceName = toResourceName(bundleName, BUNDLE_EXTENSION);
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if (reload) {
+                URL url = loader.getResource(resourceName);
+                if (url != null) {
+                    URLConnection connection = url.openConnection();
+                    if (connection != null) {
+                        connection.setUseCaches(false);
+                        stream = connection.getInputStream();
+                    }
+                }
+            } else {
+                stream = loader.getResourceAsStream(resourceName);
+            }
+            if (stream != null) {
+                try {
+                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8"));
+                } finally {
+                    stream.close();
+                }
+            }
+            return bundle;
+        }
+    }
+
+}
+
+USER.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Entity
+@Table(name = "users")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+    @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
+    @NamedQuery(name = "User.findByEmailAddress", query = "SELECT u FROM User u WHERE u.emailAddress = :emailAddress"),
+    @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
+    @NamedQuery(name = "User.findByFirstname", query = "SELECT u FROM User u WHERE u.firstname = :firstname"),
+    @NamedQuery(name = "User.findByLastname", query = "SELECT u FROM User u WHERE u.lastname = :lastname"),
+    @NamedQuery(name = "User.findByDateAdded", query = "SELECT u FROM User u WHERE u.dateAdded = :dateAdded"),
+    @NamedQuery(name = "User.findByDateLastLogIn", query = "SELECT u FROM User u WHERE u.dateLastLogIn = :dateLastLogIn"),
+    @NamedQuery(name = "User.findByStatus", query = "SELECT u FROM User u WHERE u.status = :status"),
+    @NamedQuery(name = "User.findByUserType", query = "SELECT u FROM User u WHERE u.userType = :userType"),
+    @NamedQuery(name = "User.findByEmailAddressAndPassword", query = "SELECT u FROM User u WHERE u.emailAddress = :emailAddress AND u.password = :password")})
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String emailAddress;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String password;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String firstname;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String lastname;
+    @Basic(optional = false)
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateAdded;
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateLastLogIn;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 8)
+    private String status;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 8)
+    private String userType;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idUser")
+    private Client client;
+    @JoinColumn(name = "addressId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Address address;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idUser")
+    private Employee employee;
+
+    public User() {
+    }
+
+    public User(Integer id) {
+        this.id = id;
+    }
+
+    public User(Integer id, String emailAddress, String password, String firstname, String lastname, Date dateAdded, Date dateLastLogIn, String status, String userType) {
+        this.id = id;
+        this.emailAddress = emailAddress;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateAdded = dateAdded;
+        this.dateLastLogIn = dateLastLogIn;
+        this.status = status;
+        this.userType = userType;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+    
+    public String getFullname() {
+        return (getFirstname() + " " + getLastname());
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public Date getDateLastLogIn() {
+        return dateLastLogIn;
+    }
+
+    public void setDateLastLogIn(Date dateLastLogIn) {
+        this.dateLastLogIn = dateLastLogIn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof User)) {
+            return false;
+        }
+        User other = (User) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.User[ id=" + id + " ]";
+    }
+    
+}
+
+
+USERCONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.User;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.UserFacade;
+import energo.i18n.ApplicationMessage;
+import energo.util.Global;
+import energo.util.MD5Hashing;
+import energo.util.SessionUtil;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+import javax.servlet.http.HttpSession;
+
+@ManagedBean(name = "userController")
+@SessionScoped
+public class UserController implements Serializable {
+
+    private String email;
+    private String password;
+
+    @EJB
+    private energo.facades.UserFacade ejbFacade;
+    private List<User> items = null;
+    private User selected;
+    private User loggedUser;
+    
+    private String newPassword;
+    private String newPasswordDbl;
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getNewPasswordDbl() {
+        return newPasswordDbl;
+    }
+
+    public void setNewPasswordDbl(String newPasswordDbl) {
+        this.newPasswordDbl = newPasswordDbl;
+    }
+
+    public UserController() {
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getHome() {
+        if (null != loggedUser && null != loggedUser.getUserType()) {
+            switch (loggedUser.getUserType()) {
+                case Global.USER_TYPE_ADMIN:
+                    return Global.ADMIN_DEFAULT_PAGE + "?faces-redirect=true";
+                case Global.USER_TYPE_CLIENT:
+                    return Global.CLIENT_DEFAULT_PAGE + "?faces-redirect=true";
+                case Global.USER_TYPE_EMPLOYEE:
+                    return Global.EMPLOYEE_DEFAULT_PAGE + "?faces-redirect=true";
+            }
+        }
+        return Global.DEFAULT_PAGE + "?faces-redirect=true";
+    }
+
+    public User getSelected() {
+        return selected;
+    }
+
+    public void setSelected(User selected) {
+        this.selected = selected;
+    }
+    
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private UserFacade getFacade() {
+        return ejbFacade;
+    }
+    
+    public User prepareCreate() {
+        selected = new User();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        if (null == getFacade().findUserByEmail(selected.getEmailAddress())) {
+            selected.setStatus("active"); // temp
+            selected.setPassword(MD5Hashing.getMD5(selected.getPassword()));
+            selected.setDateAdded(Calendar.getInstance().getTime());
+            persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("UserCreated"));
+        }
+        else {
+            JsfUtil.addErrorMessage(ApplicationMessage.getMessage().getString("ExistingUser"));
+        }
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;   // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("UserUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("UserDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<User> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    getFacade().create(selected);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
+                } else { // DELETE
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<User> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<User> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+    
+    public String login() {
+        if (getFacade().validate(email, password)) {
+            
+            HttpSession session = SessionUtil.getSession();
+            session.setAttribute(Global.SESSION_USER_EMAIL, email);
+            loggedUser = getFacade().findUserByEmail(email);
+            loggedUser.setDateLastLogIn(Calendar.getInstance().getTime());
+            
+            this.password = null;
+            this.email = null;
+            
+            getFacade().edit(loggedUser);
+        }
+        else {
+            JsfUtil.addErrorMessage(ApplicationMessage.getMessage().getString("InvalidUsernameOrPassword"));
+            return null;
+        }
+        
+        return getHome();
+    }
+    
+    public String logout() {
+        HttpSession session = SessionUtil.getSession();
+        session.invalidate();
+        loggedUser = null;
+        
+        return Global.DEFAULT_PAGE + "?faces-redirect=true";
+    }   
+        
+    public void changePassword() {
+        if (getFacade().validate(loggedUser.getEmailAddress(), password)) {
+            loggedUser.setPassword(MD5Hashing.getMD5(newPassword));
+            setSelected(loggedUser);
+            update();
+            selected = null;
+            JsfUtil.addSuccessMessage(ApplicationMessage.getMessage().getString("ChangedPassword"));
+        }
+        else {
+            JsfUtil.addErrorMessage(ApplicationMessage.getMessage().getString("InvalidPassword"));
+        }
+    }
+
+    @FacesConverter(forClass = User.class)
+    public static class UserControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            UserController controller = (UserController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "userController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof User) {
+                User o = (User) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), User.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+USERFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.User;
+import energo.util.MD5Hashing;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
+@Stateless
+public class UserFacade extends AbstractFacade<User> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public UserFacade() {
+        super(User.class);
+    }
+    
+    public boolean validate(String email, String password) {
+        List<User> users = em.createNamedQuery("User.findByEmailAddressAndPassword", User.class)
+                .setParameter("emailAddress", email)
+                .setParameter("password", MD5Hashing.getMD5(password)).getResultList();
+        
+        return (users != null && users.size() > 0);
+    }
+    
+    public User findUserByEmail(String emailAddress) {
+        try {
+            return em.createNamedQuery("User.findByEmailAddress", User.class)
+                    .setParameter("emailAddress", emailAddress).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+}
+
+
+WORKPLACE.JAVA
+
+package energo.models;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@Entity
+@Table(name = "workplaces")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Workplace.findAll", query = "SELECT w FROM Workplace w"),
+    @NamedQuery(name = "Workplace.findById", query = "SELECT w FROM Workplace w WHERE w.id = :id"),
+    @NamedQuery(name = "Workplace.findByName", query = "SELECT w FROM Workplace w WHERE w.name = :name")})
+public class Workplace implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String name;
+    @JoinColumn(name = "addressId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Address address;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workplace")
+    private List<Employee> employeeList;
+
+    public Workplace() {
+    }
+
+    public Workplace(Integer id) {
+        this.id = id;
+    }
+
+    public Workplace(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    @XmlTransient
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Workplace)) {
+            return false;
+        }
+        Workplace other = (Workplace) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "energo.models.Workplace[ id=" + id + " ]";
+    }
+    
+}
+
+
+WORKPLACECONTROLLER.JAVA
+
+package energo.controllers;
+
+import energo.models.Workplace;
+import energo.util.JsfUtil;
+import energo.util.JsfUtil.PersistAction;
+import energo.facades.WorkplaceFacade;
+import energo.i18n.ApplicationMessage;
+import energo.models.Address;
+import energo.models.City;
+import energo.models.Country;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
+@ManagedBean(name = "workplaceController")
+@SessionScoped
+public class WorkplaceController implements Serializable {
+/*----------------------------------------------------------------------------*/
+    @ManagedProperty(value = "#{addressController}")
+    private AddressController addressController;
+
+    public void setAddressController(AddressController addressController) {
+        this.addressController = addressController;
+    }
+/*----------------------------------------------------------------------------*/
+    
+    @EJB
+    private energo.facades.WorkplaceFacade ejbFacade;
+    private List<Workplace> items = null;
+    private Workplace selected;
+
+    public WorkplaceController() {
+    }
+
+    public Workplace getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Workplace selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+
+    }
+
+    protected void initializeEmbeddableKey() {
+        selected.setAddress(new Address());
+        selected.getAddress().setCity(new City());
+        selected.getAddress().getCity().setCountry(new Country());
+    }
+
+    private WorkplaceFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public Workplace prepareCreate() {
+        selected = new Workplace();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ApplicationMessage.getMessage().getString("WorkplaceCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ApplicationMessage.getMessage().getString("WorkplaceUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ApplicationMessage.getMessage().getString("WorkplaceDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<Workplace> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction == PersistAction.CREATE) {
+                    addressController.setSelected(selected.getAddress());
+                    addressController.create();
+                    getFacade().create(selected);
+                    addressController.setSelected(null);
+                }
+                else if (persistAction == PersistAction.UPDATE) {
+                    addressController.setSelected(selected.getAddress());
+                    addressController.update();
+                    getFacade().edit(selected);
+                    addressController.setSelected(null);
+                } else {
+                    addressController.setSelected(selected.getAddress());
+                    getFacade().remove(selected);
+                    addressController.destroy();
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ApplicationMessage.getMessage().getString("PersistenceErrorOccurred"));
+            }
+        }
+    }
+
+    public List<Workplace> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<Workplace> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = Workplace.class)
+    public static class WorkplaceControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            WorkplaceController controller = (WorkplaceController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "workplaceController");
+            return controller.getFacade().find(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Workplace) {
+                Workplace o = (Workplace) object;
+                return getStringKey(o.getId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Workplace.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+}
+
+
+WORKPLACEFACADE.JAVA
+
+package energo.facades;
+
+import energo.models.Workplace;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+
+@Stateless
+public class WorkplaceFacade extends AbstractFacade<Workplace> {
+    @PersistenceContext(unitName = "EnergoPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public WorkplaceFacade() {
+        super(Workplace.class);
+    }
+    
+}

@@ -1,0 +1,41 @@
+unit gridOperUnit;
+
+interface
+
+uses System.SysUtils, Vcl.Grids, Vcl.DBGrids;
+
+var
+  procedure SetGridColumnWidths(Grid: Tdbgrid);
+
+implementation
+
+procedure SetGridColumnWidths(Grid: Tdbgrid);
+const
+  DEFBORDER = 10;
+var
+  temp, n: Integer;
+  lmax: array [0..30] of Integer;
+begin
+  with Grid do
+  begin
+    Canvas.Font := Font;
+    for n := 0 to Columns.Count - 1 do
+      lmax[n] := Canvas.TextWidth(Fields[n].FieldName) + DEFBORDER;
+    grid.DataSource.DataSet.First;
+    while not grid.DataSource.DataSet.EOF do
+    begin
+      for n := 0 to Columns.Count - 1 do
+      begin
+        temp := Canvas.TextWidth(trim(Columns[n].Field.DisplayText)) + DEFBORDER;
+        if temp > lmax[n] then lmax[n] := temp;
+      end; {for}
+      grid.DataSource.DataSet.Next;
+    end;
+    grid.DataSource.DataSet.First;
+    for n := 0 to Columns.Count - 1 do
+      if lmax[n] > 0 then
+        Columns[n].Width := lmax[n];
+  end;
+end; {SetGridColumnWidths}
+
+end.

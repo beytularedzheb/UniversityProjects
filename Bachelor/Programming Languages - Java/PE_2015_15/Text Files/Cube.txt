@@ -1,0 +1,2 @@
+Cube (Hexahedron):It has 6 Faces; Each face has 4 edges (and is a square):Surface Area = 6 x (Edge Length)^2:8
+Cuboid:A cuboid is a box-shaped object; It has six flat faces and all angles are right angles:Surface Area = 2 x Width x Length + 2 x Length x Height + 2 x Width x Height:8

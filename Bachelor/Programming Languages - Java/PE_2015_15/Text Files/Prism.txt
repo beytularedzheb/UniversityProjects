@@ -1,0 +1,2 @@
+Square Prism:A square prism is a solid object with identical ends, flat faces and the same cross section all along its length:Surface Area = 2 x Base Area + Base Perimeter x Length:8:Square
+Triangular Prism:A triangular prism is a solid object with identical ends, flat faces and the same cross section all along its length:Surface Area = 2 x Base Area + Base Perimeter x Length:8:Triangular

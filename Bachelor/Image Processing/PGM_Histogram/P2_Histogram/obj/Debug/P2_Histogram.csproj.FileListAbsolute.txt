@@ -1,0 +1,18 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\bin\Debug\P2_Histogram.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\bin\Debug\P2_Histogram.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\bin\Debug\P2_Histogram.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.FormMain.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\P2_Histogram\obj\Debug\P2_Histogram.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\bin\Debug\P2_Histogram.exe.config
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.exe
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.pdb
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\bin\Debug\P2_Histogram.exe
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\bin\Debug\P2_Histogram.pdb
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.FormMain.resources
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\P2_Histogram\obj\Debug\P2_Histogram.csproj.GenerateResource.Cache
