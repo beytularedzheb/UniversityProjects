@@ -1,0 +1,45 @@
+
+<center>
+	<br>
+	<br>
+    <h3>Добавяне / редактиране на продажба</h3>
+    <p><font color="red"><?php print $errorMsg; ?></font></p>
+    <form action="index.php" method="post">
+        <input type="hidden" name="cmd" value="<?php print $cmd; ?>">
+        <input type="hidden" name="sid" value="<?php print $sid; ?>">
+        <table cellpadding="5">
+            <tr>
+                <td align="right">Магазин: </td>
+				<td>
+                    <select name="data[CodM]">
+                        <?php print $CodM; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Месец: </td>
+                <td>
+                    <select name="data[CodMes]">
+                        <?php print $CodMes; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">План стокооборот: </td>
+                <td>
+                    <input type="text" name="data[StPlan]" value="<?php print $StPlan; ?>">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Изпълнение стокооборот: </td>
+                <td>
+                    <input type="text" name="data[StIzp]" value="<?php print $StIzp; ?>">
+                </td>
+            </tr>			
+            <tr>
+                <td align="right"><input type="submit" value=" Запази "></td>
+				<td><input type="button" value=" Откажи " onClick="javascript:window.location='index.php?cmd=browseSales'"></td>
+            </tr>
+        </table>
+    </form>
+</center>

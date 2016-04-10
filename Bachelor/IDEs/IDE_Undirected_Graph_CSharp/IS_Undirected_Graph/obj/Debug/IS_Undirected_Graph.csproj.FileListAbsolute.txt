@@ -1,0 +1,13 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\bin\Debug\IS_Undirected_Graph.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\bin\Debug\IS_Undirected_Graph.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\bin\Debug\IS_Undirected_Graph.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.AboutForm.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.MainForm.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\IS_GraphicalEditor\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.pdb
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph\bin\Debug\IS_Undirected_Graph.exe.config
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.exe
+C:\Users\Beytula Redzheb\Desktop\IS_Undirected_Graph\obj\Debug\IS_Undirected_Graph.pdb

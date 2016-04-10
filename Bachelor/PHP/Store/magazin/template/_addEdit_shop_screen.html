@@ -1,0 +1,41 @@
+
+<center>
+	<br>
+	<br>
+	<h3>Добавяне / Редактиране на магазин</h3>
+	<p><font color="red"><?php print $errorMsg; ?></font></p>
+	<form action="index.php" method="post">
+		<input type="hidden" name="cmd" value="<?php print $cmd; ?>">
+		<input type="hidden" name="sid" value="<?php print $sid; ?>">
+		<table cellpadding="5">
+			<tr>
+				<td align="right">Име:</td>
+				<td><input type="text" name="data[NameM]" value="<?php print $NameM; ?>" size="30"></td>
+			</tr>
+			<tr>
+				<td align="right">Тип:</td>	
+				<td><input type="text" name="data[Type]" value="<?php print $Type; ?>" size="30"></td>
+			</tr>
+			<tr>
+				<td align="right">Адрес:</td>	
+				<td><input type="text" name="data[AdresM]" value="<?php print $AdresM; ?>" size="30"></td>
+			</tr>
+			<tr>
+				<td align="right">Управител:</td>	
+				<td><input type="text" name="data[Boss]" value="<?php print $Boss; ?>" size="30"></td>
+			</tr>
+			<tr>
+				<td align="right">Фирма:</td>
+				<td>
+                    <select name="data[CodF]">
+                        <?php print $CodF; ?>
+                    </select>
+                </td>
+			</tr>
+			<tr>
+				<td align="right"><input type="submit" value=" Запази "></td>
+				<td><input type="button" value=" Откажи " onClick="javascript:window.location='index.php?cmd=browseShops'"></td>
+			</tr>
+		</table>
+	</form>
+</center>

@@ -1,0 +1,9 @@
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\bin\Debug\OS_FIFO.exe.config
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\bin\Debug\OS_FIFO.exe
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\bin\Debug\OS_FIFO.pdb
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_FIFO.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_PageReplacement_FIFO.MainFrame.resources
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_FIFO.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_FIFO.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_FIFO.exe
+C:\Users\Beytula Redzheb\Desktop\OS_Page_Replacement_FIFO\OS_FIFO\obj\Debug\OS_FIFO.pdb

@@ -1,0 +1,1 @@
+Square Pyramid:It has 5 Faces;The 4 Side Faces are Triangles;It has 8 Edges:Surface Area = [Base Area] +  1/2 x Perimeter x [Slant Length]:5:Square

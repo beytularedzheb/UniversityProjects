@@ -1,0 +1,1 @@
+Concave (Pentagon):Curved inwards:Depends on the number of the sides:5

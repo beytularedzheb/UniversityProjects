@@ -1,0 +1,1 @@
+Sphere:It is perfectly symmetrical;All points on the surface are the same distance from the center:Surface Area = 4 x pi x r^2

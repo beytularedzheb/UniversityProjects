@@ -1,0 +1,18 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.FormMain.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\Grayscale_To_Binary_Image\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.pdb
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.exe.config
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.exe
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\bin\Debug\AverageOfTwoP2Images.pdb
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.FormMain.resources
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.exe
+C:\Users\Beytula Redzheb\Desktop\AverageOfTwoP2Images\obj\Debug\AverageOfTwoP2Images.pdb

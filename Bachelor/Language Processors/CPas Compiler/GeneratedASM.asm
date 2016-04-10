@@ -1,0 +1,17 @@
+LDA x
+SUB 6,5
+STA @_1
+LDA @_1
+STA x
+ET1: LDA x
+SUB n5
+BRZ LB1
+LDA 1
+JMP LB2
+LB1: LDA 0
+LB2: STA @_2
+LDA @_2
+BRZ 
+LDA 8
+STA y
+BRK

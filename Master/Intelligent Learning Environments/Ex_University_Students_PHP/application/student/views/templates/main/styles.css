@@ -1,0 +1,92 @@
+* {
+	font-family: Arial,sans-serif;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+	background: #d6d6d3;
+}
+
+a, a:active, a:visited {
+	text-decoration: none;
+	color: #5B9ED6;
+}
+
+h1 {
+	font-size: 16pt;
+	margin-bottom: 14px;
+}
+
+h2 {
+	font-size: 12pt;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 8px;
+}
+
+h3 {
+	font-size: 10pt;
+	margin-bottom: 8px;
+}
+
+img {
+	border: 0px;
+}
+
+p {
+	font-size: 10pt;
+	line-height: 150%;
+	margin-bottom: 8px;
+}
+
+td {
+	font-size: 10pt;
+	padding: 5px;
+}
+
+input[type="text"], input[type="password"], textarea, select {
+	padding: 6px 8px;
+	border: 1px solid #a9a9a9;
+	background-color: #f5f2ee;
+}
+
+input[type="submit"], input[type="button"] {
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	color: #eee;
+	background-color: #3c324a;
+	border-radius: 3px;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+	background-color: #666;
+	border: 1px solid #3c324a;
+}
+
+select {
+	padding: 5px 8px;
+}
+
+select.required {
+	padding-left: 25px;
+	background: #f5f2ee url(images/asterisk.png) no-repeat 5% 50%;
+}
+
+select.error, input.error, textarea.error {
+	border: 1px solid red;
+	background-color: #ffd2d3;
+}
+
+.center {
+	text-align: center;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.clear {
+	clear: both;
+}

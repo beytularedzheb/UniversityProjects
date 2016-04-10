@@ -1,0 +1,29 @@
+
+<center>
+	<br>
+	<br>
+	<h2 style="color:black">Фирми</h2>
+
+	<p><font color="red"><?php print $msg; ?></font></p>
+	
+	<form action="index.php" method="get">
+		<input type="hidden" name="cmd" value="browseFirms">
+		Търсене:
+		<input type="text" name="search" value="<?php print $search; ?>">
+		<input type="submit" value="Търси">
+	</form>
+	
+	<table cellpadding="5" cellspacing="0" border="1">
+		<tr bgcolor="#BBBBBB">
+			<th>ИД</th>
+			<th>Име</th>
+			<th>Адрес</th>
+			<th></th>
+			<th></th>
+		</tr>
+		<?php print $firmTable; ?>
+		<tr bgcolor="#BBBBBB">
+			<td colspan="5"><b>Брой фирми: <?php print $numberOfFirms; ?></b></td>
+		</tr>
+	</table>
+</center>

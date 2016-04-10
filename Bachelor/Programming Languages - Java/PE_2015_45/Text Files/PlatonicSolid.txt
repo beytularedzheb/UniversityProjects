@@ -1,0 +1,2 @@
+Tetrahedron:A 3D shape where each face is the same regular polygon;the same number of polygons meet at each vertex (corner):Surface area = 3^(1/2) x a^2:4
+Icosahedron:A 3D shape where each face is the same regular polygon;the same number of polygons meet at each vertex (corner):Surface area = 5 x 3^(1/2) x a^2:12

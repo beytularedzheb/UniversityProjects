@@ -1,0 +1,12 @@
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\bin\Debug\OS_AddressTranslation.exe.config
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\bin\Debug\OS_AddressTranslation.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\bin\Debug\OS_AddressTranslation.pdb
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.csprojResolveAssemblyReference.cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.FormMain.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.Properties.Resources.resources
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.csproj.GenerateResource.Cache
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.exe
+C:\Users\Beytula Redzheb\Documents\Visual Studio 2015\Projects\OS_Projects\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.pdb
+C:\Users\Beytula Redzheb\Desktop\OS_AddressTranslation\bin\Debug\OS_AddressTranslation.exe.config
+C:\Users\Beytula Redzheb\Desktop\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.exe
+C:\Users\Beytula Redzheb\Desktop\OS_AddressTranslation\obj\Debug\OS_AddressTranslation.pdb

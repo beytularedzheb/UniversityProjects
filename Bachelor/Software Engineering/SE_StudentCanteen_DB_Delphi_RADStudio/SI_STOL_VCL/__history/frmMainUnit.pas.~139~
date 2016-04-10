@@ -1,0 +1,165 @@
+unit frmMainUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
+  FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
+  FireDAC.Phys, FireDAC.Phys.MSAcc, FireDAC.Phys.MSAccDef, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.VCLUI.Wait, Data.DB,
+  FireDAC.Comp.UI, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons, DBGrids,
+  Data.Win.ADODB;
+
+type
+  TfrmMain = class(TForm)
+    btnOrders: TSpeedButton;
+    btnSearch: TSpeedButton;
+    btnMenu: TSpeedButton;
+    btnWorkers: TSpeedButton;
+    btnPositions: TSpeedButton;
+    btnStudents: TSpeedButton;
+    grboxSecCommands: TGroupBox;
+    grboxCommonCommands: TGroupBox;
+    procedure btnOrdersClick(Sender: TObject);
+    procedure btnSearchClick(Sender: TObject);
+    procedure btnMenuClick(Sender: TObject);
+    procedure btnStudentsClick(Sender: TObject);
+    procedure btnWorkersClick(Sender: TObject);
+    procedure btnPositionsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+  workerIDLog: string;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  frmOrdersUnit, frmSearchUnit,
+  frmMenuUnit, frmStudentUnit,
+  frmWorkerUnit;
+
+function checkWorker(workerID: string) : boolean;
+begin
+  try
+    frmOrders.FDQuery1.Open('SELECT Slujitel_id FROM Slujiteli where Slujitel_id=' + workerID);
+    checkWorker := not frmOrders.FDQuery1.Eof;
+    frmOrders.FDQuery1.Close;
+  except
+    checkWorker := false;
+  end;
+end;
+
+procedure TfrmMain.btnMenuClick(Sender: TObject);
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmMenu.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnOrdersClick(Sender: TObject);
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmOrders.workerID := workerIDLog;
+      frmOrders.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnPositionsClick(Sender: TObject);
+begin
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmPositions.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnSearchClick(Sender: TObject);
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmSearch.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnStudentsClick(Sender: TObject);
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmStudents.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnWorkersClick(Sender: TObject);
+var
+  isPressedOK: boolean;
+begin
+  workerIDLog := string.Empty;
+  isPressedOK := InputQuery('Идентификация на служител', 'ID на служител:', workerIDLog);
+
+  if isPressedOK then begin
+    if checkWorker(workerIDLog) then begin
+      frmWorkers.Show;
+    end
+    else begin
+      MessageDlg('Грешен код!', mtCustom, [mbOK], 0)
+    end;
+  end;
+end;
+
+end.

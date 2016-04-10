@@ -1,0 +1,23 @@
+<center>
+	<br>
+	<br>
+    <h3>Продажби по месец</h3>
+	<p><font color="red"><?php print $errorMsg; ?></font></p>
+    <form action="index.php" method="get">
+        <table cellpadding="5">
+            <tr>
+                <td align="right">Месец:</td>
+                <td>
+					<select name="data[CodMesS]" onchange="window.location.href='index.php?cmd=reportSalesByMonth&id=' + this.options[this.selectedIndex].value;">
+                        <?php print $CodMesS; ?>
+                    </select>
+				</td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <?php print $section_2; ?>
+    <br>
+    <br>
+    <?php print $section_3; ?>
+</center>

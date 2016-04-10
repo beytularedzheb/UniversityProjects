@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.465,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.104,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.774,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.804,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.453,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\gridOperUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.759,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.101,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.273,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.961,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmStudentUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.725,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmMenuUnit.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.558,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmOrdersUnit.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.654,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmWorkerUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.145,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.594,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.172,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmPositionUnit.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.961,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmStudentUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.187,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\StudentskiStol.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.558,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmOrdersUnit.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.896,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmSearchUnit.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.725,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmMenuUnit.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.896,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmSearchUnit.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.574,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmMainUnit.dfm=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.574,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmMainUnit.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.653,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\gridOperUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.594,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.654,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmWorkerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.172,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\Unit1.pas=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\frmPositionUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.024,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.806,C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\SI_STOL_VCL\gridOperUnit.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.829,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,=C:\Users\TheSilentPC\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

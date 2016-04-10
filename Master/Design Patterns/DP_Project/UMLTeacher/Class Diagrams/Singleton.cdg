@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="TeacherSingleton">
+  <ClassDiagramComponents>
+    <Class name="TeacherSingleton" package="dpteacher" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="connectionString" type="String" visibility="private" isFinal="true"/>
+        <Field name="username" type="String" visibility="private" isFinal="true"/>
+        <Field name="password" type="String" visibility="private" isFinal="true"/>
+        <Field name="instance" type="TeacherSingleton" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getInstance" returnType="TeacherSingleton" visibility="public" isStatic="true"/>
+        <Method name="addTeacher" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="getTeachers" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="getTeacher" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="dpteacher.TeacherSingleton" target="dpteacher.TeacherSingleton" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="instance" source="dpteacher.TeacherSingleton" target="dpteacher.TeacherSingleton" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

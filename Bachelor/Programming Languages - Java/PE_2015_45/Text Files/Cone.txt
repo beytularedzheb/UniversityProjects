@@ -1,0 +1,1 @@
+Cone:A Cone is a Rotated Triangle;It has a flat base;It has one curved side:Surface Area = pi x r x (r + s)

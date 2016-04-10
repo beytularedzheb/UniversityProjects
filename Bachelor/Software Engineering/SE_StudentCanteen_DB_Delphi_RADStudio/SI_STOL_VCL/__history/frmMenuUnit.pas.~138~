@@ -1,0 +1,200 @@
+unit frmMenuUnit;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.UI.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.Phys.MSAcc,
+  FireDAC.Phys.MSAccDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.UI,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons;
+
+type
+  TfrmMenu = class(TForm)
+    grboxAddDish: TGroupBox;
+    btnAdd: TSpeedButton;
+    btnClearAddForm: TSpeedButton;
+    lbleditDishName: TLabeledEdit;
+    grboxSearch: TGroupBox;
+    btnSearch: TSpeedButton;
+    btnDelete: TSpeedButton;
+    lbleditSearch: TLabeledEdit;
+    DBGrid1: TDBGrid;
+    lbleditPrice: TLabeledEdit;
+    lbleditDescription: TLabeledEdit;
+    gboxEditDish: TGroupBox;
+    btnUpdateOrder: TSpeedButton;
+    btnClearEditPanel: TSpeedButton;
+    lbleditDish: TLabeledEdit;
+    lbleditCenaEdit: TLabeledEdit;
+    lbleditDescr: TLabeledEdit;
+    FDConnection1: TFDConnection;
+    FDQuery1: TFDQuery;
+    FDQuery2: TFDQuery;
+    DataSource1: TDataSource;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    procedure lbleditPriceKeyPress(Sender: TObject; var Key: Char);
+    procedure btnAddClick(Sender: TObject);
+    procedure btnClearAddFormClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure btnClearEditPanelClick(Sender: TObject);
+    procedure lbleditSearchKeyPress(Sender: TObject; var Key: Char);
+    procedure btnSearchClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnUpdateOrderClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMenu: TfrmMenu;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMenu.btnAddClick(Sender: TObject);
+begin
+  if string.IsNullOrEmpty(lbleditDishName.Text) then
+    ShowMessage('Моля въведете име!')
+  else if string.IsNullOrEmpty(lbleditPrice.Text) then
+    ShowMessage('Моля въведете цена!')
+  else if string.IsNullOrEmpty(lbleditDescription.Text) then
+    ShowMessage('Моля въведете описание!')
+  else begin
+    FDQuery1.SQL.Text :=
+      'INSERT INTO qstia(ime, cena, opisanie) VALUES(:ime, :cena, :opisanie)';
+    FDQuery1.ParamByName('ime').Value := lbleditDishName.Text;
+    FDQuery1.ParamByName('cena').Value := StrToFloat(lbleditPrice.Text);
+    FDQuery1.ParamByName('opisanie').Value := lbleditDescription.Text;
+    FDQuery1.ExecSQL;
+
+    ShowMessage('Ястието е добавено!');
+    btnClearAddFormClick(Sender);
+  end;
+end;
+
+procedure TfrmMenu.btnClearAddFormClick(Sender: TObject);
+begin
+  lbleditDishName.Clear;
+  lbleditPrice.Clear;
+  lbleditDescription.Clear;
+end;
+
+procedure TfrmMenu.btnClearEditPanelClick(Sender: TObject);
+begin
+  lbleditDish.Clear;
+  lbleditCenaEdit.Clear;
+  lbleditDescr.Clear;
+end;
+
+procedure TfrmMenu.btnDeleteClick(Sender: TObject);
+var
+  dishID: string;
+begin
+  if MessageDlg('Наистина ли искате да се изтрие записът?',
+      mtCustom, [mbYes, mbNo], 0) = mrYes then begin
+    dishID := DBGrid1.DataSource.DataSet.FieldByName('qstia_id').AsString;
+    FDQuery1.SQL.Text := 'DELETE FROM qstia WHERE qstia_id = ' + dishID;
+    FDQuery1.ExecSQL;
+
+    DBGrid1.DataSource.DataSet.Refresh;
+
+    ShowMessage('Ястие номер ' + dishID + ' е изтрита!');
+    btnClearEditPanelClick(Sender);
+    gboxEditDish.Visible := false;
+    btnDelete.Visible := false;
+  end;
+end;
+
+procedure TfrmMenu.btnSearchClick(Sender: TObject);
+begin
+  if not string.IsNullOrEmpty(lbleditSearch.Text) then begin
+    FDQuery2.Active := false;
+    FDQuery2.SQL.Text := 'SELECT * FROM qstia WHERE qstia_Id=' +
+        lbleditSearch.Text;
+    FDQuery2.Active := true;
+    if not DBGrid1.DataSource.DataSet.IsEmpty then begin
+      gboxEditDish.Visible := true;
+      btnDelete.Visible := true;
+    end
+    else begin
+      gboxEditDish.Visible := false;
+      btnDelete.Visible := false;
+    end;
+  end;
+end;
+
+procedure TfrmMenu.btnUpdateOrderClick(Sender: TObject);
+var
+  queryStr: string;
+  tr: boolean;
+begin
+  tr := false;
+  queryStr := 'UPDATE qstia SET ';
+//-------------------------------------------------------------------------------------
+  if not string.IsNullOrEmpty(lbleditDish.Text) then begin
+    queryStr := queryStr + 'ime=' + QuotedStr(lbleditDish.Text);
+    tr := true;
+  end;
+//-------------------------------------------------------------------------------------
+  if not string.IsNullOrEmpty(lbleditCenaEdit.Text) then begin
+    if tr then
+       queryStr := queryStr + ', cena=' + QuotedStr(lbleditCenaEdit.Text)
+    else begin
+      queryStr := queryStr + 'cena=' + QuotedStr(lbleditCenaEdit.Text);
+    end;
+    tr := true;
+  end;
+//-------------------------------------------------------------------------------------
+  if not string.IsNullOrEmpty(lbleditDescr.Text) then begin
+    if tr then
+      queryStr := queryStr +  ', opisanie=' + QuotedStr(lbleditDescr.Text)
+    else
+      queryStr := queryStr +  'opisanie=' + QuotedStr(lbleditDescr.Text);
+        tr := true;
+  end;
+//-------------------------------------------------------------------------------------
+  if tr then begin
+    queryStr := queryStr + ' WHERE qstia_id=' +
+      DBGrid1.DataSource.DataSet.FieldByName('qstia_id').AsString;
+      showmessage(queryStr);
+    FDQuery1.SQL.Clear;
+    FDQuery1.ExecSQL(queryStr);
+
+    btnClearEditPanelClick(Sender);
+
+    DBGrid1.DataSource.DataSet.Refresh;
+    ShowMessage('Данните са редактирани!');
+  end;
+//-------------------------------------------------------------------------------------
+end;
+
+procedure TfrmMenu.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  btnClearEditPanelClick(Sender);
+  btnClearAddFormClick(Sender);
+  btnDelete.Visible := false;
+  gboxEditDish.Visible := false;
+  lbleditSearch.Clear;
+  btnSearchClick(Sender);
+end;
+
+procedure TfrmMenu.lbleditPriceKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key in ['0'..'9', '.', #8] = false then
+    Key := #0;
+end;
+
+procedure TfrmMenu.lbleditSearchKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    btnSearchClick(Sender);
+end;
+
+end.

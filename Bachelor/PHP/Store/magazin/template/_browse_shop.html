@@ -1,0 +1,32 @@
+
+<center>
+	<br>
+	<br>
+	<h2 style="color:black">Магазини</h2>
+
+	<p><font color="red"><?php print $msg; ?></font></p>
+	
+	<form action="index.php" method="get">
+		<input type="hidden" name="cmd" value="browseShops">
+		Търси:
+		<input type="text" name="search" value="<?php print $search; ?>">
+		<input type="submit" value="Търси">
+	</form>
+	
+	<table cellpadding="5" cellspacing="0" border="1">
+		<tr bgcolor="#BBBBBB">
+			<th>ИД</th>
+			<th>Тип</th>
+			<th>Име</th>
+			<th>Адрес</th>
+			<th>Управител</th>
+			<th>Фирма</th>
+			<th></th>
+			<th></th>
+		</tr>
+		<?php print $tableShops; ?>
+		<tr bgcolor="#BBBBBB">
+			<td colspan="8"><b>Брой магазини: <?php print $numberOfShops; ?></b></td>
+		</tr>
+	</table>
+</center>

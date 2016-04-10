@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Multi-file class diagram">
+  <ClassDiagramComponents>
+    <Class name="TeacherAdapter" package="dpteacher" visibility="public" xPosition="243.0" yPosition="381.0">
+      <Fields>
+        <Field name="adaptee" type="TeacherSingleton" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="TeacherSingleton" package="dpteacher" visibility="public" xPosition="304.0" yPosition="24.0">
+      <Fields>
+        <Field name="connectionString" type="String" visibility="private" isFinal="true"/>
+        <Field name="username" type="String" visibility="private" isFinal="true"/>
+        <Field name="password" type="String" visibility="private" isFinal="true"/>
+        <Field name="instance" type="TeacherSingleton" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getInstance" returnType="TeacherSingleton" visibility="public" isStatic="true"/>
+        <Method name="addTeacher" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="getTeachers" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="getTeacher" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Interface name="IOperations" package="dpteacher" visibility="public" xPosition="19.0" yPosition="35.0">
+      <Methods>
+        <Method name="write" returnType="void" visibility="public">
+          <Argument type="Teacher" name="teacher"/>
+        </Method>
+        <Method name="readAll" returnType="List&lt;Teacher&gt;" visibility="public"/>
+        <Method name="read" returnType="Teacher" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="dpteacher.TeacherAdapter" target="dpteacher.IOperations"/>
+    <HasRelation name="adaptee" source="dpteacher.TeacherAdapter" target="dpteacher.TeacherSingleton" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="dpteacher.TeacherSingleton" target="dpteacher.TeacherSingleton" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="instance" source="dpteacher.TeacherSingleton" target="dpteacher.TeacherSingleton" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

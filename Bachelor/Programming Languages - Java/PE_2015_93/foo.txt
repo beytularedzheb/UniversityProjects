@@ -1,0 +1,45 @@
+*#*#*#*
+13
+Philips SBCMD110
+true
+Audio
+Omni
+*#*#*#*
+1
+Belkin NetCam
+false
+Visual
+0.3
+*#*#*#*
+9
+Acer T232HL
+true
+Input - mechanical motion : Output - Visual
+10
+*#*#*#*
+15
+ASUS P7P55 LX LGA1156
+true
+Socket 1156
+*#*#*#*
+5
+CPU Cooling Fan Cooler Heatsink
+false
+2800
+*#*#*#*
+17
+Xerox WorkCentre 3215
+false
+Input/Output - visual
+Printer/Photocopier/Scanner/Fax/E-mail
+*#*#*#*
+22
+Zebronics SC-6CH
+false
+5.1
+*#*#*#*
+24
+ATi Radeon X1550
+true
+512
+12.8

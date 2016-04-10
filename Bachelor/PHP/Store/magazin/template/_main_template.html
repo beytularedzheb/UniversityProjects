@@ -1,0 +1,77 @@
+<html>
+<head>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+	<title>Информационна система "Магазин"</title>
+	<link rel="stylesheet" type="text/css" href="main.css" media="screen">
+</head>
+<body marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
+	<table cellspacing="0" cellpadding="0" width="100%" height="100%" border="1">
+		<tr height="100" bgcolor="b20a1a">
+			<td align="center" colspan="2"><h2>Информационна система "Магазин"</h2></td>
+		</tr>
+		<tr>
+			<td width="200" bgcolor="#b20a1a" valign="top">
+				<!-- Menu -->
+				<br>
+				<br>
+				<table width="100%" border="0">
+					<tr>
+						<td align="left">&nbsp; <font color="white"><b>Магазини</b></font></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=addShop">Добавяне</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=browseShops">Преглед</a></td>
+					</tr>
+					<tr>
+						<td align="left"><br></td>
+					</tr>
+					<tr>
+						<td align="left">&nbsp; <font color="white"><b>Фирми</b></font></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=addFirm">Добавяне</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=browseFirms">Преглед</a></td>
+					</tr>
+					<tr>
+						<td align="left"><br></td>
+					</tr>
+					<tr>
+						<td align="left">&nbsp; <font color="white"><b>Продажби</b></font></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=addSale">Добавяне</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=browseSales">Преглед</a></td>
+					</tr>
+					<tr>
+						<td align="left"><br></td>
+					</tr>
+					<tr>
+						<td align="left">&nbsp; <font color="white"><b>Справки</b></font></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=reportSalesByMonth">Продажби по месец</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a class="menu" href="index.php?cmd=reportPreizpilnenie">Преизпълнение по магазин</a></td>
+					</tr>					
+				</table>
+				<!-- Krai na menuto -->
+			</td>
+			<td valign="top" bgcolor="#FFFFCC">
+			<!-- Dinamichna oblast -->
+			<?php print $content; ?>
+			<!-- Krai na dinamichnata oblast -->
+			</td>
+		</tr>
+		<tr height="30" bgcolor="#b20a1a">
+			<td colspan="2" align="center"><font color="white">Екип: М. Тошева и А. Анастасов</font></td>
+		</tr>
+	</table>
+</body>
+</html>

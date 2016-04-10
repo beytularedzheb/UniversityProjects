@@ -1,0 +1,23 @@
+<center>
+	<br>
+	<br>
+    <h3>Преизпълнение по магазин</h3>
+	<p><font color="red"><?php print $errorMsg; ?></font></p>
+    <form action="index.php" method="get">
+        <table cellpadding="5">
+            <tr>
+                <td align="right">Магазин:</td>
+                <td>
+					<select name="data[MagCode]" onchange="window.location.href='index.php?cmd=reportPreizpilnenie&id=' + this.options[this.selectedIndex].value;">
+                        <?php print $MagCode; ?>
+                    </select>
+				</td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <?php print $section_2; ?>
+    <br>
+    <br>
+    <?php print $section_3; ?>
+</center>

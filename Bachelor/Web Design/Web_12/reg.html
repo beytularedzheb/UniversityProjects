@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Registration</title>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="wrapper">
+		<!--Header Begin-->
+		<div id="header">
+			<a href="home.html"><img src="images/logo.png" alt="Logo"></a>
+		</div>
+		<!--Header End-->
+		
+		<!--Main Begin-->
+		<div id="main">
+			<div id="content">
+				<h2>Registration</h2>
+				<div class="post">
+					<form id="reg_form" method="post" action="#" >
+						<fieldset>
+							<legend></legend>
+							<table>
+								<tr>
+									<th colspan="2">Моля въведете:</th>
+								</tr>
+								<tr>
+									<td><label for="firstN">Име: </label></td>
+									<td><input type="text" id="firstN"></td>
+								</tr>
+								<tr>
+									<td><label for="famN">Фамилия: </label></td>
+									<td><input type="text" id="famN"></td>
+								</tr>
+								<tr>
+									<td><label for="email">Ел. поща: </label></td>
+									<td><input type="text" id="email"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><label for="comments">Напишете кратко съобщение: </label></td>
+								</tr>
+								<tr>
+									<td colspan="2"><textarea id="comments" rows="1" cols="1"></textarea></td>
+								</tr>
+								<tr>
+									<td><label for="email">Нисък: </label></td>
+									<td><input type="radio" name="prior" value="nisuk"></td>
+								</tr>
+								<tr>
+									<td><label for="email">Среден: </label></td>
+									<td><input type="radio" name="prior" value="sreden"></td>
+								</tr>
+								<tr>
+									<td><label for="email">Висок: </label></td>
+									<td><input type="radio" name="prior" value="visok"></td>
+								</tr>							
+								<tr>
+									<td><input type="submit" value="Изпрати" name="submit"></td>
+									<td><input type="reset" value="Изчисти" name="reset"></td>
+								</tr>
+							</table>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+			
+			<div id="sidebar_right">
+				<ul id="menu">
+					<li class="first-child"><h3>Navigation</h3></li>
+					<li>
+						<a href="home.html" onmouseover="this.style.backgroundColor='#ccc';this.style.color='#fff';" 
+						onmouseout="this.style.backgroundColor='#e5e5e5';this.style.color='#4a53ff';">Home</a>
+					</li>
+					<li>
+						<a href="pages.html" onmouseover="this.style.backgroundColor='#ccc';this.style.color='#fff';" 
+						onmouseout="this.style.backgroundColor='#e5e5e5';this.style.color='#4a53ff';">Pages</a>
+					</li>
+					<li>
+						<a href="reg.html" onmouseover="this.style.backgroundColor='#ccc';this.style.color='#fff';" 
+						onmouseout="this.style.backgroundColor='#e5e5e5';this.style.color='#4a53ff';">Registration</a>
+					</li>
+					<li>
+						<a href="gal.html" onmouseover="this.style.backgroundColor='#ccc';this.style.color='#fff';" 
+						onmouseout="this.style.backgroundColor='#e5e5e5';this.style.color='#4a53ff';">Gallery</a>
+					</li>
+					<li>
+						<a href="about.html" onmouseover="this.style.backgroundColor='#ccc';this.style.color='#fff';" 
+						onmouseout="this.style.backgroundColor='#e5e5e5';this.style.color='#4a53ff';">About</a>
+					</li>
+					<li class="last-child"></li>
+				</ul>
+			</div>
+		</div>
+		<!--Main End-->
+		
+		<!--Footer Begin-->
+		<div id="footer">
+			<p>Copyright &copy; / София ул. Ангел Кънчев 5 / +359 888 884 444</p>
+		</div>
+		<!--Footer End-->
+	</div>
+</body>
+</html>
